@@ -4,15 +4,69 @@ using UnityEngine;
 
 public class CutoutBehaviour : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [Header("Generals")]
+    public bool once = false;
+
+    [Header("Movements")]
+    public float destination;
+    public float horizontalWalkDistance = 1;
+    public AnimationCurve verticalWalkCurve;
+    public float groundHeight = 0;
+
+    [Header("Animations")]
+    public AnimationCurve derivateCurve;
+    public float derivateFactor = 1f;
+    public float derivateSpeed = 1;
+    public float walkTimeAfterAnimation = 1f;
+    public float walkTimeAnimation = 1f;
+    public LeanTweenType walkEase;
+    
+    public float facingTimerAfterAnimation = 1f;
+    public float facingTimeAnimation = 1f;
+    public LeanTweenType facingEase;
+
+    float timer;
+    float prevS;
+    float prevX;
+
+    public void Update()
     {
-        
+        // Handle Timer
+        timer = Mathf.Max(0, timer-Time.deltaTime);
+        if (timer > 0) return;
+
+        // Calculate and Facing forward
+        float sDestination = Mathf.Sign(destination - transform.position.x);
+        if (sDestination != prevS)
+        {
+            // Rotate with LeanTween
+            LeanTween.rotateY(gameObject, Mathf.Max(0, sDestination) * 180, facingTimeAnimation).setEase(facingEase);
+            timer = facingTimeAnimation + facingTimerAfterAnimation;
+            prevS = sDestination;
+        }
+        else
+        {
+            // Calculate End Position of the travel
+            // Move with LeanTween
+            float finalX = transform.position.x + horizontalWalkDistance * sDestination;
+            LeanTween.moveX(gameObject, finalX, walkTimeAnimation).setEase(walkEase).setOnUpdate( (float v) => {
+                transform.position = new Vector3(transform.position.x, groundHeight + verticalWalkCurve.Evaluate(v), 0);
+                transform.localEulerAngles = new(0, transform.localEulerAngles.y, derivateCurve.Evaluate(v * derivateSpeed) * derivateFactor);
+            }).setOnComplete(() => { if(once) { Destroy(gameObject); } });
+            timer = walkTimeAnimation + walkTimeAfterAnimation;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnDrawGizmosSelected()
     {
-        
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(new(destination, groundHeight), 0.1f);
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(new Vector3(-10, groundHeight, 0), new Vector3(10, groundHeight, 0));
+
+        transform.position = new Vector3(transform.position.x, groundHeight, 0);
+
     }
+
 }
