@@ -27,7 +27,6 @@ public class CutoutBehaviour : MonoBehaviour
 
     float timer;
     float prevS;
-    float prevX;
 
     public void Update()
     {
