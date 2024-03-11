@@ -1,9 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Animations;
 using UnityEngine;
 using TMPro;
-using UnityEngine.Rendering;
 
 public class GameManager : MonoBehaviour
 {
@@ -33,9 +29,12 @@ public class GameManager : MonoBehaviour
     public string clapNameState = "clap";
     public TextMeshPro titleClap, descrClap;
 
-
     public void StartSession()
     {
+        // Reset count of tries
+        tries = 3;
+
+        // Hide GUI Elements
         LeanTween.moveLocalY(TitleSign, offScreenYTitle, transitionTime).setEase(easeType);
         LeanTween.moveLocalY(GUIFrame, offScreenYGUI, transitionTime).setEase(easeType).setOnComplete(() =>
         {
@@ -44,6 +43,7 @@ public class GameManager : MonoBehaviour
                 NextMiniGame();
             });
         });
+        
     }
 
     public void NextMiniGame()
@@ -63,28 +63,49 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        if (isStarted) miniGames[Mathf.Min(0, currentMiniGame)].UpdateGame();
+    }
 
-        if (isStarted)
+    public void ShowGUI()
+    {
+        LeanTween.moveLocalY(TitleSign, 3.17f, transitionTime).setEase(easeType);
+        LeanTween.moveLocalY(GUIFrame, -600f, transitionTime).setEase(easeType);
+    }
+
+    public void UpdateSpots()
+    {
+        for (var i = 0; i < spots.Length; i++)
         {
-            miniGames[Mathf.Min(0, currentMiniGame)].UpdateGame();
+            spots[i].gameObject.SetActive(i < tries);
         }
-
     }
 
     public static void GameOver()
     {
-        var go = FindAnyObjectByType<GameManager>();
-        if (go.gameArea != null) Destroy(go.gameArea);
+        // Get the GameManager
+        var gameManager = FindAnyObjectByType<GameManager>();
+        if (gameManager.gameArea != null) Destroy(gameManager.gameArea);
 
-        go.tries--;
-        for (var i = 0; i < go.spots.Length; i++)
+        // Update the number of tries + spots
+        gameManager.tries--;
+        gameManager.UpdateSpots();
+
+        // Check if is the end ? 
+        if (gameManager.tries == 0)
         {
-            go.spots[i].gameObject.SetActive(i < go.tries);
+
+            gameManager.tries = 99; // just for the spot update
+            gameManager.UpdateSpots();
+            gameManager.ShowGUI();
+
+        }
+        else
+        {
+            // Reload the current MiniGame
+            gameManager.currentMiniGame--;
+            gameManager.NextMiniGame();
         }
 
-
-        go.currentMiniGame--;
-        go.NextMiniGame();
     }
 
 }

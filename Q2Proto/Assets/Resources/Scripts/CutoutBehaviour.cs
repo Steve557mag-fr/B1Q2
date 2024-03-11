@@ -5,25 +5,24 @@ using UnityEngine;
 public class CutoutBehaviour : MonoBehaviour
 {
     [Header("Generals")]
-    public bool once = false;
+    [SerializeField] bool once = false;
 
     [Header("Movements")]
     public float destination;
-    public float horizontalWalkDistance = 1;
-    public AnimationCurve verticalWalkCurve;
-    public float groundHeight = 0;
+    [SerializeField] float horizontalWalkDistance = 1;
+    [SerializeField] AnimationCurve verticalWalkCurve;
+    [SerializeField] float groundHeight = 0;
 
     [Header("Animations")]
-    public AnimationCurve derivateCurve;
-    public float derivateFactor = 1f;
-    public float derivateSpeed = 1;
-    public float walkTimeAfterAnimation = 1f;
-    public float walkTimeAnimation = 1f;
-    public LeanTweenType walkEase;
-    
-    public float facingTimerAfterAnimation = 1f;
-    public float facingTimeAnimation = 1f;
-    public LeanTweenType facingEase;
+    [SerializeField] AnimationCurve derivateCurve;
+    [SerializeField] float derivateFactor = 1f;
+    [SerializeField] float derivateSpeed = 1;
+    [SerializeField] float walkTimeAfterAnimation = 1f;
+    [SerializeField] float walkTimeAnimation = 1f;
+    [SerializeField] float facingTimerAfterAnimation = 1f;
+    [SerializeField] float facingTimeAnimation = 1f;
+    [SerializeField] LeanTweenType walkEase;
+    [SerializeField] LeanTweenType facingEase;
 
     float timer;
     float prevS;
@@ -58,14 +57,11 @@ public class CutoutBehaviour : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-
         Gizmos.color = Color.red;
         Gizmos.DrawSphere(new(destination, groundHeight), 0.1f);
         Gizmos.color = Color.green;
         Gizmos.DrawLine(new Vector3(-10, groundHeight, 0), new Vector3(10, groundHeight, 0));
-
         transform.position = new Vector3(transform.position.x, groundHeight, 0);
-
     }
 
 }
