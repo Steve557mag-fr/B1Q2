@@ -11,10 +11,9 @@ public class GameManager : MonoBehaviour
     public GameObject[] spots;
     GameObject gameArea;
 
-    [Header("Enemies")]
-    public int hatID;
-    public int signID, colorID;
-    public Sprite[] hats, signs;
+    [Header("Enemy Target")]
+    public Evil currentEvil;
+    public Sprite[] hats;
     public Color[] colors;
 
     [Header("Menu Transition")]
@@ -34,21 +33,35 @@ public class GameManager : MonoBehaviour
         // Reset count of tries
         tries = 3;
 
-        // Hide GUI Elements
-        LeanTween.moveLocalY(TitleSign, offScreenYTitle, transitionTime).setEase(easeType);
-        LeanTween.moveLocalY(GUIFrame, offScreenYGUI, transitionTime).setEase(easeType).setOnComplete(() =>
+        // Take a random evil
+        currentEvil = new Evil()
         {
-            LeanTween.delayedCall(delayStartSession, ()=>{
-                currentMiniGame = -1;
-                NextMiniGame();
-            });
-        });
+            hatID = Random.Range(0, hats.Length),
+            colorID = Random.Range(0, colors.Length)
+        };
+
+        // Hide GUI Elements
+        HideGUI();
         
     }
+    public void EndSession()
+    {
+        tries = 99; // just for the spot update
+        UpdateSpots();
+        ShowGUI();
+    }
+    public void WinSession()
+    {
+        print("BRAWOO ");
+    }
+
 
     public void NextMiniGame()
     {
         currentMiniGame++;
+
+        if (currentMiniGame >= miniGames.Length) WinSession();
+
         titleClap.text = miniGames[currentMiniGame].tileText;
         descrClap.text = miniGames[currentMiniGame].descriptionText;
         controller.Play(clapNameState);
@@ -57,21 +70,28 @@ public class GameManager : MonoBehaviour
     {
         if (gameArea != null) Destroy(gameArea);
         gameArea = new GameObject("GameArea");
+        gameArea.transform.parent = miniGames[currentMiniGame].decorationLayer.transform;
         miniGames[currentMiniGame].StartGame(gameArea);
         isStarted = true;
     }
-
-    void Update()
-    {
-        if (isStarted) miniGames[Mathf.Min(0, currentMiniGame)].UpdateGame();
-    }
+    
 
     public void ShowGUI()
     {
         LeanTween.moveLocalY(TitleSign, 3.17f, transitionTime).setEase(easeType);
         LeanTween.moveLocalY(GUIFrame, -600f, transitionTime).setEase(easeType);
     }
-
+    public void HideGUI()
+    {
+        LeanTween.moveLocalY(TitleSign, offScreenYTitle, transitionTime).setEase(easeType);
+        LeanTween.moveLocalY(GUIFrame, offScreenYGUI, transitionTime).setEase(easeType).setOnComplete(() =>
+        {
+            LeanTween.delayedCall(delayStartSession, () => {
+                currentMiniGame = -1;
+                NextMiniGame();
+            });
+        });
+    }
     public void UpdateSpots()
     {
         for (var i = 0; i < spots.Length; i++)
@@ -80,32 +100,49 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public static void GameOver()
+
+    public void GameOver()
     {
         // Get the GameManager
-        var gameManager = FindAnyObjectByType<GameManager>();
-        if (gameManager.gameArea != null) Destroy(gameManager.gameArea);
+        if (gameArea != null) Destroy(gameArea);
 
         // Update the number of tries + spots
-        gameManager.tries--;
-        gameManager.UpdateSpots();
+        tries--;
+        UpdateSpots();
 
         // Check if is the end ? 
-        if (gameManager.tries == 0)
+        if (tries == 0)
         {
-
-            gameManager.tries = 99; // just for the spot update
-            gameManager.UpdateSpots();
-            gameManager.ShowGUI();
-
+            // End Session
+            EndSession();
         }
         else
         {
             // Reload the current MiniGame
-            gameManager.currentMiniGame--;
-            gameManager.NextMiniGame();
+            currentMiniGame--;
+            NextMiniGame();
         }
 
     }
+    public static Evil GetEvil()
+    {
+        return FindAnyObjectByType<GameManager>().currentEvil;
+    }
+    public static GameManager GetInstance()
+    {
+        return FindAnyObjectByType<GameManager>();
+    }
 
+
+    void Update()
+    {
+        if (isStarted) miniGames[Mathf.Min(0, currentMiniGame)].UpdateGame();
+    }
+    
+}
+
+public struct Evil
+{
+    public int hatID;
+    public int colorID;
 }

@@ -128,9 +128,9 @@ MonoBehaviour:
   derivateSpeed: 1
   walkTimeAfterAnimation: 0.5
   walkTimeAnimation: 0.5
-  walkEase: 1
-  facingTimerAfterAnimation: 0.1
+  facingTimerAfterAnimation: 0.05
   facingTimeAnimation: 0.25
+  walkEase: 1
   facingEase: 32
 --- !u!1 &5363246373682834739
 GameObject:

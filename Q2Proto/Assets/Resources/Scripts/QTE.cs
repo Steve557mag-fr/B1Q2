@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class QTE : MiniGame
 {
@@ -8,6 +9,7 @@ public class QTE : MiniGame
     [SerializeField] Player player;
     [SerializeField] GameObject lettersContainer;
     [SerializeField] TextMeshPro[] letters;
+    [SerializeField] GameObject needle;
 
     [Header("Camera Settings")]
     [SerializeField] Camera qteCamera;
@@ -59,12 +61,12 @@ public class QTE : MiniGame
         });
 
         // Center the camera on the action
-        LeanTween.move(qteCamera.gameObject,
-            new Vector3(currEnemy.obj.transform.position.x, currEnemy.obj.transform.position.y+2.5f, -10f), 0.25f)
-            .setOnUpdate((float e) =>
-            {
-                qteCamera.orthographicSize = Mathf.Lerp(camerScaleOutQTE, camerScaleInQTE, e);
-            });
+        Vector3 target = new(currEnemy.obj.transform.position.x, currEnemy.obj.transform.position.y + 2.5f, -10f);
+        LeanTween.move(qteCamera.gameObject, target, 0.25f)
+        .setOnUpdate((float e) =>
+        {
+            qteCamera.orthographicSize = Mathf.Lerp(camerScaleOutQTE, camerScaleInQTE, e);
+        });
 
     }
 
@@ -106,13 +108,7 @@ public class QTE : MiniGame
     {
         print("[QTE]: FAIL");
         lockKey = true;
-
-        ExitQTEView();
-        LeanTween.delayedCall(1f, () =>
-        {
-            RestartGame();
-        });
-
+        LooseGame(looseSequence);
     }
 
     public void SuccessQTE()
@@ -132,14 +128,12 @@ public class QTE : MiniGame
             // Unfreeze the monsters
             for (int i = 0; i < enemies.Count; i++)
             {
-                Enemy enemy = enemies[i];
-                enemy.obj.GetComponent<CutoutBehaviour>().enabled = true;
-                if (enemy.obj == currEnemy.obj) enemies.RemoveAt(i);
+                enemies[i].obj.GetComponent<CutoutBehaviour>().enabled = true;
+                if (enemies[i].obj == currEnemy.obj) enemies.RemoveAt(i);
             }
 
             // Destroy the Monster
             Destroy(currEnemy.obj);
-            return;
 
         }
         else currKey++;
@@ -167,6 +161,9 @@ public class QTE : MiniGame
         if (isEnded) return;
 
         // Check the global timer
+        float needleOffset = (1 - (globalTimer / 30));
+        needle.transform.localPosition = transform.right * needleOffset - 0.5f * transform.right - 0.1f * transform.up;
+
         if (globalTimer <= 0)
         {
             isEnded = true;
@@ -215,6 +212,14 @@ public class QTE : MiniGame
         if (Input.GetKeyDown(combo[currKey])) SuccessQTE();
         else FailQUTE();
 
+    }
+
+    public override void LooseGame(PlayableDirector obj)
+    {
+        ExitQTEView();
+        ClearGame();
+        looseSequence.Play();
+        looseSequence.stopped += (PlayableDirector d) => { base.LooseGame(d); };
     }
 
 }
