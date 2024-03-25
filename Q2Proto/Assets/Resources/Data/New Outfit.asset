@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d56ce3d9a9e3ecd489e352dec1c3e783, type: 3}
+  m_Name: New Outfit
+  m_EditorClassIdentifier: 
+  asset: {fileID: 8524266666355576332, guid: ed44cf013e2e279408b21dfe62c897f5, type: 3}
+  position: {x: 0, y: 0, z: 0}

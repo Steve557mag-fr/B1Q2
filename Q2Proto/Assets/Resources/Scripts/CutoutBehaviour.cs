@@ -9,7 +9,7 @@ public class CutoutBehaviour : MonoBehaviour
 
     [Header("Movements")]
     public float destination;
-    [SerializeField] float horizontalWalkDistance = 1;
+    public float horizontalWalkDistance = 1;
     [SerializeField] AnimationCurve verticalWalkCurve;
     [SerializeField] float groundHeight = 0;
 
@@ -66,9 +66,7 @@ public class CutoutBehaviour : MonoBehaviour
 
     public void OnDestroy()
     {
-
         Instantiate(Resources.Load<GameObject>("Prefabs/SmokeParticle"), transform.position+Vector3.up * 1, Quaternion.identity);
-
     }
 
 }

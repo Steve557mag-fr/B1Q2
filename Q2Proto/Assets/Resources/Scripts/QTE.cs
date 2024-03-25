@@ -26,6 +26,9 @@ public class QTE : MiniGame
     [SerializeField] float minRadius = 1.5f;
     [SerializeField] float nextEnemyTime;
 
+    [Header("Generals")]
+    [SerializeField] float maxTimer = 30;
+
     int currKey;
     KeyCode[] combo;
     Enemy currEnemy;
@@ -106,11 +109,10 @@ public class QTE : MiniGame
 
     public void FailQUTE()
     {
-        print("[QTE]: FAIL");
         lockKey = true;
         LooseGame(looseSequence);
     }
-
+    
     public void SuccessQTE()
     {
         print($"[QTE]: SUCCESS at {currKey+1}/3");
@@ -147,28 +149,24 @@ public class QTE : MiniGame
     
     public override void StartGame(GameObject area)
     {
-        print("[MG1]: Started!");
         base.StartGame(area);
+        player.isFreeze = false;
         enemies = new();
         timerNextEnemy = Random.Range(1, nextEnemyTime);
-        globalTimer = 30;
+        globalTimer = maxTimer;
         lockKey = false;
         qteBusy = false;
     }
 
     public override void UpdateGame()
     {
-        if (isEnded) return;
+        base.UpdateGame();
 
         // Check the global timer
         float needleOffset = (1 - (globalTimer / 30));
         needle.transform.localPosition = transform.right * needleOffset - 0.5f * transform.right - 0.1f * transform.up;
 
-        if (globalTimer <= 0)
-        {
-            isEnded = true;
-            WinGame();
-        }
+        if (globalTimer <= 0) WinGame();
 
         if (!qteBusy)
         {
@@ -188,10 +186,10 @@ public class QTE : MiniGame
             {
                 timerNextEnemy = nextEnemyTime;
                 // INSERT RANDOM EVIL :D
-                GameObject spawned = Instantiate(enemyPrefabs, PickPosition(), Quaternion.identity);
-                spawned.GetComponent<CutoutBehaviour>().destination = 0;
-                spawned.transform.parent = gArea.transform;
-                enemies.Add(new() { obj = spawned , needCheck = true});
+                GameObject enemySpawned = GameManager.GetEnemy(true, 2);
+                enemySpawned.transform.position = PickPosition();
+                enemySpawned.transform.parent = gArea.transform;
+                enemies.Add(new() { obj = enemySpawned , needCheck = true});
             }
             timerNextEnemy -= Time.deltaTime;
             globalTimer -= Time.deltaTime;
@@ -217,9 +215,7 @@ public class QTE : MiniGame
     public override void LooseGame(PlayableDirector obj)
     {
         ExitQTEView();
-        ClearGame();
-        looseSequence.Play();
-        looseSequence.stopped += (PlayableDirector d) => { base.LooseGame(d); };
+        base.LooseGame(obj);
     }
 
 }

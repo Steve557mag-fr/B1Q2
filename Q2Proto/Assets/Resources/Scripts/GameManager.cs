@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Enemy Target")]
     public Evil currentEvil;
-    public Sprite[] hats;
+    public Outfit[] outfits;
     public Color[] colors;
 
     [Header("Menu Transition")]
@@ -28,26 +28,35 @@ public class GameManager : MonoBehaviour
     public string clapNameState = "clap";
     public TextMeshPro titleClap, descrClap;
 
+    bool softLockSession = false;
+
     public void StartSession()
     {
+        if (softLockSession) return;
+        softLockSession = true;
         // Reset count of tries
         tries = 3;
 
         // Take a random evil
         currentEvil = new Evil()
         {
-            hatID = Random.Range(0, hats.Length),
+            outfitID = Random.Range(0, outfits.Length),
             colorID = Random.Range(0, colors.Length)
         };
 
         // Hide GUI Elements
-        HideGUI();
+        HideGUI(() =>
+        {
+            currentMiniGame = -1;
+            NextMiniGame();
+        });
         
     }
     public void EndSession()
     {
-        tries = 99; // just for the spot update
-        UpdateSpots();
+        softLockSession = false;
+        UpdateSpots(true);
+        tries = 0;
         ShowGUI();
     }
     public void WinSession()
@@ -56,11 +65,18 @@ public class GameManager : MonoBehaviour
     }
 
 
+    
+
     public void NextMiniGame()
     {
+        Debug.Log("[GM]: Next MG");
+        isStarted = false;
         currentMiniGame++;
-
-        if (currentMiniGame >= miniGames.Length) WinSession();
+        if (currentMiniGame >= miniGames.Length)
+        {
+            WinSession();
+            return;
+        }
 
         titleClap.text = miniGames[currentMiniGame].tileText;
         descrClap.text = miniGames[currentMiniGame].descriptionText;
@@ -68,6 +84,10 @@ public class GameManager : MonoBehaviour
     }
     public void EnableMiniGame()
     {
+        Debug.Log("[GM]: Enable MG");
+
+        currentMiniGame = Mathf.Clamp(currentMiniGame, 0, miniGames.Length - 1);
+
         if (gameArea != null) Destroy(gameArea);
         gameArea = new GameObject("GameArea");
         gameArea.transform.parent = miniGames[currentMiniGame].decorationLayer.transform;
@@ -81,68 +101,88 @@ public class GameManager : MonoBehaviour
         LeanTween.moveLocalY(TitleSign, 3.17f, transitionTime).setEase(easeType);
         LeanTween.moveLocalY(GUIFrame, -600f, transitionTime).setEase(easeType);
     }
-    public void HideGUI()
+    public void HideGUI(System.Action afterStart)
     {
         LeanTween.moveLocalY(TitleSign, offScreenYTitle, transitionTime).setEase(easeType);
         LeanTween.moveLocalY(GUIFrame, offScreenYGUI, transitionTime).setEase(easeType).setOnComplete(() =>
         {
             LeanTween.delayedCall(delayStartSession, () => {
-                currentMiniGame = -1;
-                NextMiniGame();
+                afterStart();
             });
         });
     }
-    public void UpdateSpots()
+    public void UpdateSpots(bool forceOn = false)
     {
         for (var i = 0; i < spots.Length; i++)
         {
-            spots[i].gameObject.SetActive(i < tries);
+            spots[i].gameObject.SetActive(forceOn || i < tries);
         }
     }
 
 
     public void GameOver()
     {
-        // Get the GameManager
+        // Destroy the GameArea
         if (gameArea != null) Destroy(gameArea);
 
         // Update the number of tries + spots
-        tries--;
+        tries = Mathf.Clamp(tries - 1, 0, 3);
         UpdateSpots();
 
         // Check if is the end ? 
-        if (tries == 0)
+        if (tries <= 0)
         {
             // End Session
+            print("ending..");
             EndSession();
-        }
-        else
-        {
-            // Reload the current MiniGame
-            currentMiniGame--;
-            NextMiniGame();
+            return;
         }
 
+        // Reload the current MiniGame
+        print("reloading..");
+        currentMiniGame--;
+        NextMiniGame();
+
+
     }
-    public static Evil GetEvil()
+    
+
+    public static GameObject GetEnemy(bool isEvil, int countOutfit)
     {
-        return FindAnyObjectByType<GameManager>().currentEvil;
+        // get the evil base
+        GameManager instance = GetInstance();
+        Evil evil = instance.currentEvil;
+        GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Enemy"));
+        
+        // set outfits
+        for(int i = 0; i < countOutfit; i++)
+        {
+            Outfit outfit = instance.outfits[isEvil ? evil.outfitID : Random.Range(0, instance.outfits.Length)];
+            GameObject gOutfit = Instantiate(outfit.asset, go.transform);
+            gOutfit.transform.localPosition = outfit.position;
+
+            if (gOutfit.transform.Find("Tintable"))
+            {
+                gOutfit.transform.Find("Tintable").GetComponent<SpriteRenderer>().color = isEvil ? instance.colors[evil.colorID] : Color.white;
+            }
+        }
+        return go;
     }
     public static GameManager GetInstance()
     {
         return FindAnyObjectByType<GameManager>();
     }
-
+    
 
     void Update()
     {
-        if (isStarted) miniGames[Mathf.Min(0, currentMiniGame)].UpdateGame();
+        if (isStarted) miniGames[Mathf.Clamp(currentMiniGame, 0, miniGames.Length-1)].UpdateGame();
     }
     
 }
 
 public struct Evil
 {
-    public int hatID;
+    public int outfitID;
     public int colorID;
 }
