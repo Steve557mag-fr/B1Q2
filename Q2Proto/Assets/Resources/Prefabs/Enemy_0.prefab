@@ -167,7 +167,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  groundHeight: -4.46
+  groundHeight: -5.33
   derivateCurve:
     serializedVersion: 2
     m_Curve:
