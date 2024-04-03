@@ -147,7 +147,7 @@ public class GameManager : MonoBehaviour
     }
     
 
-    public static GameObject GetEnemy(bool isEvil, int countOutfit)
+    public static GameObject GetEnemy(bool isEvil, int countOutfit = 1)
     {
         // get the evil base
         GameManager instance = GetInstance();

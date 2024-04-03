@@ -14,6 +14,8 @@ public class FindEnemies : MiniGame
     int index = 1;
     float globalTimer = 30;
 
+    bool lockMove;
+
     public override void StartGame(GameObject area)
     {
         base.StartGame(area);
@@ -24,7 +26,7 @@ public class FindEnemies : MiniGame
         for(int i = 0; i < countEnemies; i++)
         {
             seats[i].isEvil = Random.Range(0, 100) >= chanceForEvil;
-            seats[i].cutout = GameManager.GetEnemy(seats[i].isEvil, Random.Range(1,3));
+            seats[i].cutout = GameManager.GetEnemy(seats[i].isEvil);
             seats[i].cutout.transform.position = points[i].position;
             seats[i].cutout.transform.parent = area.transform;
             seats[i].cutout.GetComponent<CutoutBehaviour>().destination = seats[i].cutout.transform.position.x;
@@ -37,16 +39,18 @@ public class FindEnemies : MiniGame
     {
         base.UpdateGame();
 
-        if (Input.GetKeyDown(player.left))
+        if (Input.GetKeyDown(player.left) && !lockMove)
         {
+            lockMove = true;
             index = Mathf.Clamp(index - 1, 0, points.Length-1);
-            player.SetDestination(points[index].position.x);
+            player.SetDestination(points[index].position.x, () => { lockMove = false; });
         }
 
-        if (Input.GetKeyDown(player.right))
+        if (Input.GetKeyDown(player.right) && !lockMove)
         {
+            lockMove = true;
             index = Mathf.Clamp(index + 1, 0, points.Length-1);
-            player.SetDestination(points[index].position.x);
+            player.SetDestination(points[index].position.x, () => { lockMove = false; });
         }
 
         if (Input.GetKeyDown(approve)) Approve();

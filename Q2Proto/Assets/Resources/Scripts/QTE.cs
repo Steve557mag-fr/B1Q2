@@ -156,7 +156,7 @@ public class QTE : MiniGame
             eventsOnStart.Invoke();
         });
 
-        player.GetComponent<SpriteRenderer>().enabled = true;
+        player.SetVisible(true);
         player.isFreeze = false;
         enemies = new();
         timerNextEnemy = Random.Range(1, nextEnemyTime);
@@ -193,7 +193,7 @@ public class QTE : MiniGame
             {
                 timerNextEnemy = nextEnemyTime;
                 // INSERT RANDOM EVIL :D
-                GameObject enemySpawned = GameManager.GetEnemy(true, 2);
+                GameObject enemySpawned = GameManager.GetEnemy(true);
                 enemySpawned.transform.position = PickPosition();
                 enemySpawned.transform.parent = gArea.transform;
                 enemies.Add(new() { obj = enemySpawned , needCheck = true});
