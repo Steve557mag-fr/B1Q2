@@ -24,8 +24,13 @@ public class MiniGame : MonoBehaviour
     bool alreadyLinked = false;
 
 
-    public virtual void StartGame(GameObject area) {
-        LeanTween.moveLocal(decorationLayer, new Vector3(0, 0, 0), timerShowHide);
+    public virtual void StartGame(GameObject area)
+    {
+        StartGame(area, () => { });
+    }
+
+    public virtual void StartGame(GameObject area, Action func) {
+        LeanTween.moveLocal(decorationLayer, new Vector3(0, 0, 0), timerShowHide).setOnComplete(func);
         softLockMiniGame = false;
         gArea = area;
 

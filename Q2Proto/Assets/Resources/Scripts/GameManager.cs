@@ -152,7 +152,7 @@ public class GameManager : MonoBehaviour
         // get the evil base
         GameManager instance = GetInstance();
         Evil evil = instance.currentEvil;
-        GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Enemy"));
+        GameObject go = Instantiate(Resources.Load<GameObject>($"Prefabs/Enemy_{Random.Range(0,2)}"));
         
         // set outfits
         for(int i = 0; i < countOutfit; i++)

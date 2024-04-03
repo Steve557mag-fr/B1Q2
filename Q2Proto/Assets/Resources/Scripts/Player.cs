@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
     [SerializeField] float speed = 2f;
     [SerializeField] float facingTimeAnimation;
     [SerializeField] LeanTweenType facingEase;
-
+    [SerializeField] SpriteRenderer renderer;
     [SerializeField] float minScene, maxScene;
 
     float oldPosition, prevS;
@@ -43,6 +43,11 @@ public class Player : MonoBehaviour
         if (distance < 0.01f) return;
 
         LeanTween.moveX(gameObject, destination, distance / speed);
+    }
+        
+    public void SetVisible(bool isVisible)
+    {
+        renderer.enabled = isVisible;
     }
 
 }

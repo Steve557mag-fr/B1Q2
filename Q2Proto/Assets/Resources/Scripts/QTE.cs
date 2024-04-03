@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Playables;
 
 public class QTE : MiniGame
@@ -28,6 +29,7 @@ public class QTE : MiniGame
 
     [Header("Generals")]
     [SerializeField] float maxTimer = 30;
+    public UnityEvent eventsOnStart, eventsOnFinish;
 
     int currKey;
     KeyCode[] combo;
@@ -149,13 +151,18 @@ public class QTE : MiniGame
     
     public override void StartGame(GameObject area)
     {
-        base.StartGame(area);
+        base.StartGame(area, () =>
+        {
+            eventsOnStart.Invoke();
+        });
+
+        player.GetComponent<SpriteRenderer>().enabled = true;
         player.isFreeze = false;
         enemies = new();
         timerNextEnemy = Random.Range(1, nextEnemyTime);
         globalTimer = maxTimer;
         lockKey = false;
-        qteBusy = false;
+        qteBusy = false; 
     }
 
     public override void UpdateGame()
@@ -212,9 +219,16 @@ public class QTE : MiniGame
 
     }
 
+    public override void WinGame()
+    {
+        eventsOnFinish.Invoke();
+        base.WinGame();
+    }
+
     public override void LooseGame(PlayableDirector obj)
     {
         ExitQTEView();
+        eventsOnFinish.Invoke();
         base.LooseGame(obj);
     }
 
