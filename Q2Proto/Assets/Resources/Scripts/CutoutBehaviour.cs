@@ -66,7 +66,7 @@ public class CutoutBehaviour : MonoBehaviour
 
     public void OnDestroy()
     {
-        Instantiate(Resources.Load<GameObject>("Prefabs/SmokeParticle"), transform.position+Vector3.up * 1, Quaternion.identity);
+        Instantiate(Resources.Load<GameObject>("Prefabs/SmokeParticle"), transform.position+Vector3.up * 2, Quaternion.identity);
     }
 
 }

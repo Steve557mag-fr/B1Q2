@@ -890,11 +890,4 @@ AnimationClip:
     flags: 0
   m_HasGenericRootTransform: 1
   m_HasMotionFloatCurves: 0
-  m_Events:
-  - time: 2.5
-    functionName: EnableMiniGame
-    data: 
-    objectReferenceParameter: {fileID: 11500000, guid: 21c5381f9510ec8489fc40bd8704ccdd, type: 3}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
+  m_Events: []
