@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Fighter : MiniGame
@@ -11,9 +13,18 @@ public class Fighter : MiniGame
     public float maxQTETime = 4;
     public Transform gaugeFuel;
 
+    public float cameraOutSize, cameraInSize;
+    public float cameraTransitionTime;
+    public LeanTweenType cameraTransitionEase;
+
+    public Transform containerLetters;
+    public Transform[] stickLetters;
+    public TextMeshPro[] letters;
+
     float timeForEnemy, timeForQTE;
     bool isBusy;
 
+    Enemy currentEnemy;
     int currentComboIndex = 0;
     int[] keyCombo;
 
@@ -33,7 +44,7 @@ public class Fighter : MiniGame
         if (isBusy)
         {
 
-            if (Input.anyKey)
+            if (Input.anyKeyDown)
             {
                 if (Input.GetKeyDown(Player.instance.keys[keyCombo[currentComboIndex]])) SuccessQTE();
                 else GameOver();
@@ -47,21 +58,41 @@ public class Fighter : MiniGame
         if (timeForEnemy > 0) timeForEnemy = Mathf.Clamp(timeForEnemy - Time.deltaTime, 0, maxEnemyTime);
         else SpawnEnemy();
 
-        foreach(var enemy in enemies)
+        for(int i = 0; i < enemies.Count; i++)
         {
+            var enemy = enemies[i];
+            if (enemy.cutout == null)
+            {
+                enemies.RemoveAt(i);
+                continue;
+            }
             if(Vector2.Distance(Player.instance.transform.position, enemy.cutout.transform.position) < 2 && enemy.canDetected)
             {
-                EnterQTE();
+                currentEnemy = enemy;
+                enemy.canDetected = false;
+                EnterQTE(enemy.cutout.transform.position.x * Vector3.right + Vector3.up * -2.0f + Vector3.forward * -10);
             }
         }
     }
     internal override void Over()
     {
         Player.instance.isFreeze = true;
+        foreach(var enemy in enemies)
+        {
+            Destroy(enemy.cutout.gameObject);
+        }
+        enemies = new List<Enemy>();
+
+        ExitQTE();
     }
     internal override void Win()
     {
         Player.instance.isFreeze = true;
+        foreach (var enemy in enemies)
+        {
+            Destroy(enemy.cutout.gameObject);
+        }
+        enemies = new List<Enemy>();
     }
     internal override void TimerEnded()
     {
@@ -70,19 +101,73 @@ public class Fighter : MiniGame
 
     #endregion
     #region Utils
-    void EnterQTE()
+    void EnterQTE(Vector3 cameraPosition)
     {
+        if (isBusy) return;
+        isBusy = true;
 
+        foreach(Enemy enemeny in enemies)
+        {
+            enemeny.cutout.enabled = false;
+        }
+
+        Camera.main.transform.LeanMove(cameraPosition,cameraTransitionTime).setEase(cameraTransitionEase);
+        LeanTween.value(cameraOutSize, cameraInSize, cameraTransitionTime).setEase(cameraTransitionEase).setOnUpdate((v) =>
+        {
+            Camera.main.orthographicSize = v;
+        });
+
+        keyCombo = new int[]
+        {
+            Random.Range(0,2),
+            Random.Range(0,2),
+            Random.Range(0,2)
+        };
+        currentComboIndex = 0;
+        timeForQTE = maxQTETime;
+
+        containerLetters.transform.localPosition = new(cameraPosition.x, -5f, 0f);
+        for(int i = 0; i < 3; i++)
+        {
+            letters[i].text = Player.instance.keys[keyCombo[i]].ToString();
+            stickLetters[i].transform.localEulerAngles = Vector3.zero;
+        }
     }
 
     void SuccessQTE()
     {
+        currentComboIndex++;
+
+        for (int i = 0; i < currentComboIndex; i++)
+        {
+            stickLetters[i].transform.LeanRotateX(90, 0.1f);
+        }
+
+        if (currentComboIndex >= keyCombo.Length)
+        {
+            Destroy(currentEnemy.cutout.gameObject);
+            ExitQTE();
+            
+            return;
+        }
 
     }
 
     void ExitQTE()
     {
+        Camera.main.transform.LeanMove(new Vector3(0,0,-10), cameraTransitionTime).setEase(cameraTransitionEase);
+        LeanTween.value(cameraInSize, cameraOutSize, cameraTransitionTime).setEase(cameraTransitionEase).setOnUpdate((v) =>
+        {
+            Camera.main.orthographicSize = v;
+        });
 
+        foreach (Enemy enemeny in enemies)
+        {
+            enemeny.cutout.enabled = true;
+        }
+
+        containerLetters.transform.localPosition = new(12f, -5f, 0);
+        isBusy = false;
     }
 
     void SpawnEnemy()
