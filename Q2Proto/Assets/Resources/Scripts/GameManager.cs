@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.Playables;
+using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,6 +13,10 @@ public class GameManager : MonoBehaviour
     public Animator clapAnimator;
     public string clapStateName;
 
+    [Header("Curtain")]
+    public Animator curtainAnim;
+    public float curtainTime;
+
     [Header("Ending")]
     public PlayableDirector bravoSeq;
 
@@ -19,7 +24,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] MiniGame[] miniGames;
 
     int tries = 3;
-    [HideInInspector] public int currentMG = 0;
+    [HideInInspector] public int currentMGIndex = 0;
     bool isStarted = false;
 
     private void Awake()
@@ -31,6 +36,7 @@ public class GameManager : MonoBehaviour
     void onBravoSeqEnded(PlayableDirector dir)
     {
         DirectorUtils.CompleteStop(dir);
+        EndSession();
     }
 
     public void StartSession()
@@ -38,30 +44,38 @@ public class GameManager : MonoBehaviour
         if (isStarted) return;
         isStarted = true;
         tries = 3;
-        currentMG = 0;
-
-        PlayMiniGame(currentMG);
-
+        currentMGIndex = 0;
+        PlayClap(0);
     }
 
     public void PlayClap(int iMG)
     {
+        
         clapTriesText.text = $"{tries} tries left";
         clapTitleText.text = miniGames[iMG].title;
         clapDescriptionText.text = miniGames[iMG].description;
         clapAnimator.Play(clapStateName);
+        GetCurrentMiniGame().GameSetup();
     }
 
     public void PlayEnding()
     {
-        bravoSeq.Play();
+        isStarted = false;
+
+        GetCurrentMiniGame().AllDown(() =>
+        {
+            ToggleCurtain(true);
+            bravoSeq.Play();
+        });
     }
 
     public void EndSession()
     {
-
-
         isStarted = false;
+        ToggleCurtain(false, () =>
+        {
+            Menu.instance.ToggleMenuPanel(true, () => { });
+        });
     }
 
     public bool VerifyTries()
@@ -71,30 +85,36 @@ public class GameManager : MonoBehaviour
         return tries > 0;
     }
 
-    public void PlayMiniGame(int index)
+
+    public MiniGame GetCurrentMiniGame()
     {
-        miniGames[currentMG].Initialize();
+        return miniGames[Math.Clamp(currentMGIndex,0, miniGames.Length-1)];
     }
 
-    public void RestartCurrentMG()
+    public void ToggleCurtain(bool isOpen, Action callback = null, float delayTime = 1)
     {
-        PlayClap(currentMG);
-    }
-
-    public void NextMiniGame()
-    {
-
-        currentMG++;
-        if(currentMG == miniGames.Length) PlayEnding();
-        else PlayClap(currentMG);
-
+        curtainAnim.SetBool("isOpen",isOpen);
+        LeanTween.delayedCall(curtainTime+delayTime, callback);
     }
 
     public void Update()
     {
-        if (isStarted && miniGames[currentMG].isEnabled) miniGames[currentMG].UpdateTimer();
+        if (isStarted && miniGames[currentMGIndex].isEnabled) miniGames[currentMGIndex].GameTick();
     }
-    
+
+    internal void ReloadMiniGame()
+    {
+        ToggleCurtain(false, () => {
+            PlayClap(currentMGIndex);
+        });
+    }
+
+    internal void NextMiniGame()
+    {
+        currentMGIndex++;
+        if (currentMGIndex >= miniGames.Length) PlayEnding(); else PlayClap(currentMGIndex);
+    }
+
     public static GameManager instance
     {
         get { return FindObjectOfType<GameManager>(); }

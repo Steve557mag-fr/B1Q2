@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class AnimatorStateHandler : StateMachineBehaviour
+public class AnimatorStateHandler : MonoBehaviour
 {
 
     public UnityEvent onEnded;
 
-    // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-        onEnded.Invoke();
-    }
-
     public void PlayMG()
     {
-        GameManager.instance.PlayClap(GameManager.instance.currentMG);
+        GameManager.instance.ToggleCurtain(true);
+        GameManager.instance.GetCurrentMiniGame().GameBegin();
+    }
+
+    public void VerifyPath(int i)
+    {
+        ((SpaceTravel)GameManager.instance.GetCurrentMiniGame()).VerifyPath(i);
     }
 
 }

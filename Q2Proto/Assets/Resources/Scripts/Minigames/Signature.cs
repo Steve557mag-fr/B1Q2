@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class Signature : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [Header("Game Settings")]
+    public People[] peoples;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
+
+}
+
+public struct People
+{
+    public bool isInteracted;
+    public bool isEvil;
+    public CutoutBehaviour cutout;
 }

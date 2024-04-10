@@ -33,7 +33,7 @@ public class Menu : MonoBehaviour
         int intrAmount = Player.GetAxisDown(KeyCode.S, KeyCode.W);
         currentInteract = Mathf.Clamp(currentInteract + intrAmount, 0, interactionSets[currentSet].interactions.Length-1);
 
-        if (Input.GetKey(KeyCode.Return)) interactionSets[currentSet].interactions[currentInteract].interaction.Invoke();
+        if (Input.GetKeyDown(KeyCode.Return)) interactionSets[currentSet].interactions[currentInteract].interaction.Invoke();
         cursor.LeanMoveLocalY(interactionSets[currentSet].interactions[currentInteract].yPosition, cursorTransitionTime).setEase(cursorTransitionType);
 
     }
@@ -43,9 +43,19 @@ public class Menu : MonoBehaviour
         currentSet = Mathf.Clamp(currentSet, 0, interactionSets.Length - 1);
     }
 
-    public void ToggleMenuPanel(bool visible)
+    public void ToggleMenuPanel(bool visible, System.Action callback)
     {
-        menuPanel.LeanMoveY(visible ? menuPanelOnScreen : menuPanelOffScreen, menuPanelTransitionTime).setEase(menuPanelTransitionType);
+        menuPanel.LeanMoveY(visible ? menuPanelOnScreen : menuPanelOffScreen, menuPanelTransitionTime).setEase(menuPanelTransitionType).setOnComplete(callback);
+    }
+
+    public void PlayClick()
+    {
+        ToggleMenuPanel(false, () => { GameManager.instance.StartSession(); });
+    }
+
+    public static Menu instance
+    {
+        get { return FindAnyObjectByType<Menu>(); }
     }
 
 }
