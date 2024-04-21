@@ -195,6 +195,12 @@ public class Fighter : MiniGame
         var outfit = Instantiate(p.outfitID.asset, clone.transform);
         outfit.transform.localPosition = p.outfitID.positions[enemyID].position;
 
+        var a = clone.transform.Find("Tintable");
+        if (a != null)
+        {
+            a.GetComponent<SpriteRenderer>().color = p.color;
+        }
+
         var enemy = new Enemy();
         enemy.cutout = clone.GetComponent<CutoutBehaviour>();
         enemy.canDetected = true;

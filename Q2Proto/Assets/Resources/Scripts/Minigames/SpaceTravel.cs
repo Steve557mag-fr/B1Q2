@@ -31,6 +31,13 @@ public class SpaceTravel : MiniGame
         vessel.Play("Reset");
         Player.instance.SetVisible(false);
         GetNewPath();
+        
+    }
+
+    internal override void Begin()
+    {
+        base.Begin();
+        lockInput = false;
     }
 
     internal override void Tick()
@@ -40,7 +47,7 @@ public class SpaceTravel : MiniGame
         if (Input.GetKeyDown(Player.instance.keys[1])) PlayVessel(currentPieces[1].pathID);
         if (Input.GetKeyDown(Player.instance.keys[2])) PlayVessel(currentPieces[2].pathID);
 
-        gauge.transform.localScale = new(Mathf.Lerp(0, 0.97f, timeLeft/currentTimeMax ), 0.120129f, 1);
+        gauge.transform.localScale = new(Mathf.Lerp(0, 7.63f, timeLeft/currentTimeMax ), 0.61f, 1);
 
     }
 

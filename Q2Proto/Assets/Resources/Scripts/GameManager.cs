@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public int currentMGIndex = 0;
     bool isStarted = false;
 
-    private void Awake()
+    private void Start()
     {
         isStarted = false;
         bravoSeq.stopped += onBravoSeqEnded;

@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Resources/Scenes/SceneDecorations.unity
     guid: b08acc08f582f8241b1128768a236577
+  - enabled: 1
+    path: Assets/Resources/Scenes/SeqScene.unity
+    guid: 16b0df7974303d145825bad24f6bf322
   m_configObjects: {}

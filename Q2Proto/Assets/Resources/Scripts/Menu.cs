@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class Menu : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class Menu : MonoBehaviour
     public GameObject cursor;
     public float cursorTransitionTime;
     public LeanTweenType cursorTransitionType;
+
 
     void Update()
     {
