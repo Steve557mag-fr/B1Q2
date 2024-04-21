@@ -179,7 +179,7 @@ GameObject:
   - component: {fileID: 6263268018369795999}
   - component: {fileID: 6116349255623202659}
   m_Layer: 0
-  m_Name: personnage vetement 2
+  m_Name: Tintable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -300,6 +300,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   once: 0
+  localSpaceHeight: 0
   destination: 0
   horizontalWalkDistance: 1
   verticalWalkCurve:

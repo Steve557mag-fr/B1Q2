@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class CutoutBehaviour : MonoBehaviour
 {
     [Header("Generals")]
     [SerializeField] bool once = false;
+    [SerializeField] bool localSpaceHeight = false;
 
     [Header("Movements")]
     public float destination;
@@ -48,7 +50,7 @@ public class CutoutBehaviour : MonoBehaviour
             // Move with LeanTween
             float finalX = transform.position.x + horizontalWalkDistance * sDestination;
             LeanTween.moveX(gameObject, finalX, walkTimeAnimation).setEase(walkEase).setOnUpdate( (float v) => {
-                transform.position = new Vector3(transform.position.x, groundHeight + verticalWalkCurve.Evaluate(v), 0);
+                transform.position = new Vector3(transform.position.x, getHeight + verticalWalkCurve.Evaluate(v), 0);
                 transform.localEulerAngles = new(0, transform.localEulerAngles.y, derivateCurve.Evaluate(v * derivateSpeed) * derivateFactor);
             }).setOnComplete(() => { if(once) { Destroy(gameObject); } });
             timer = walkTimeAnimation + walkTimeAfterAnimation;
@@ -58,15 +60,25 @@ public class CutoutBehaviour : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawSphere(new(destination, groundHeight), 0.1f);
+        Gizmos.DrawSphere(new(destination, getHeight), 0.1f);
         Gizmos.color = Color.green;
-        Gizmos.DrawLine(new Vector3(-10, groundHeight, 0), new Vector3(10, groundHeight, 0));
-        transform.position = new Vector3(transform.position.x, groundHeight, 0);
+        Gizmos.DrawLine(new Vector3(-10, getHeight, 0), new Vector3(10, getHeight, 0));
+        transform.position = new Vector3(transform.position.x, getHeight, 0);
     }
 
     public void OnDestroy()
     {
         Instantiate(Resources.Load<GameObject>("Prefabs/SmokeParticle"), transform.position+Vector3.up * 2, Quaternion.identity);
+    }
+
+    public void RandomizeWalkTimer(float maxTime = 15)
+    {
+        timer = Mathf.Max(0, timer + Random.Range(1,maxTime));
+    }
+
+    float getHeight
+    {
+        get { return groundHeight + (localSpaceHeight ? 1 : 0) * (transform.parent == null? 0 : transform.parent.transform.position.y); }
     }
 
 }

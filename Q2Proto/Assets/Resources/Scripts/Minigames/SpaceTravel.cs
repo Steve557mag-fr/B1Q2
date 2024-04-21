@@ -1,5 +1,6 @@
 using System;
 using System.IO.IsolatedStorage;
+using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -10,24 +11,26 @@ public class SpaceTravel : MiniGame
     public Piece[] pieces;
     public SpriteRenderer[] slots, pathSlots;
 
+    public float[] timerByAnswer;
+
+    public Transform gauge;
+    public TextMeshPro textLeft;
+
     public Sprite goodPathSprite, badPathSprite;
 
     public Piece[] currentPieces;
     public int currentGoodPathID;
 
+    float currentTimeMax = 30;
     int answersCount = 0;
     bool lockInput = true;
 
     internal override void Setup()
     {
-        vessel.Play("Reset");
-        GetNewPath();
-    }
-
-    internal override void Begin()
-    {
         answersCount = 0;
-        SetTimer(30);
+        vessel.Play("Reset");
+        Player.instance.SetVisible(false);
+        GetNewPath();
     }
 
     internal override void Tick()
@@ -36,6 +39,9 @@ public class SpaceTravel : MiniGame
         if (Input.GetKeyDown(Player.instance.keys[0])) PlayVessel(currentPieces[0].pathID);
         if (Input.GetKeyDown(Player.instance.keys[1])) PlayVessel(currentPieces[1].pathID);
         if (Input.GetKeyDown(Player.instance.keys[2])) PlayVessel(currentPieces[2].pathID);
+
+        gauge.transform.localScale = new(Mathf.Lerp(0, 0.97f, timeLeft/currentTimeMax ), 0.120129f, 1);
+
     }
 
     public void PlayVessel(int pathID)
@@ -49,6 +55,8 @@ public class SpaceTravel : MiniGame
         vessel.Play("Reset");
 
         answersCount++;
+        textLeft.text = $"{answersCount}/3";
+
         if (answersCount < 3) GetNewPath();
         else GameWin();
     }
@@ -64,6 +72,10 @@ public class SpaceTravel : MiniGame
         {
             pathSlots[i].sprite = i == currentGoodPathID ? goodPathSprite : badPathSprite;
         }
+
+
+        textLeft.text = $"{answersCount}/3";
+
     }
     public void GetNewPath()
     {
@@ -72,6 +84,9 @@ public class SpaceTravel : MiniGame
         currentGoodPathID = Random.Range(0, 2);
         currentPieces = new Piece[3];
         int picked = 0;
+
+        currentTimeMax = timerByAnswer[answersCount];
+        SetTimer(currentTimeMax);
 
         //Pick a good piece
         Piece[] goodP = Array.FindAll(pieces, p => p.pathID == currentGoodPathID);

@@ -24,7 +24,7 @@ public class MiniGame : MonoBehaviour
     public Layer Gameplay, Sequences, Decoration;
 
     [HideInInspector] public bool isEnabled;
-    bool alreadyLinked = false;
+    bool alreadyLinked = false, timerEnabled = true;
     float time = 0;
 
     internal void GameSetup()
@@ -59,6 +59,7 @@ public class MiniGame : MonoBehaviour
     internal void GameBegin()
     {
         isEnabled = true;
+        timerEnabled = true;
         Begin();
     }
     internal void GameOver()
@@ -85,7 +86,7 @@ public class MiniGame : MonoBehaviour
     internal void GameTick()
     {
         if (!isEnabled) return;
-        if (time > 0) time = Mathf.Max(0, time - Time.deltaTime); else TimerEnded();
+        if(timerEnabled) if (time > 0 ) time = Mathf.Max(0, time - Time.deltaTime); else TimerEnded();
         Tick();
     }
 
@@ -101,6 +102,7 @@ public class MiniGame : MonoBehaviour
     }
     #endregion
     #region Utils
+    internal void SetActiveTimer(bool isActive) { timerEnabled = isActive; }
     internal void SetTimer(float value)
     {
         time = Mathf.Clamp(time + value, 0, 30);
@@ -130,6 +132,11 @@ public class MiniGame : MonoBehaviour
         ToggleSceneLayer(Sequences, false);
         ToggleSceneLayer(Decoration, false, callback, 1);
 
+    }
+    internal float timeLeft
+    {
+        get { return time; }
+        set { SetTimer(value); }
     }
     #endregion
 }

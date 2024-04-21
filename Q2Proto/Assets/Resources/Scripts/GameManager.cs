@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.Playables;
 using System;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -22,6 +23,11 @@ public class GameManager : MonoBehaviour
 
 
     [SerializeField] MiniGame[] miniGames;
+
+    [Header("Evil Settings")]
+    public EvilProfile evilProfile;
+    [SerializeField] Color[] evilColors;
+    [SerializeField] Outfit[] evilOutfits;
 
     int tries = 3;
     [HideInInspector] public int currentMGIndex = 0;
@@ -45,6 +51,7 @@ public class GameManager : MonoBehaviour
         isStarted = true;
         tries = 3;
         currentMGIndex = 0;
+        GenerateEvilProfile();
         PlayClap(0);
     }
 
@@ -115,9 +122,24 @@ public class GameManager : MonoBehaviour
         if (currentMGIndex >= miniGames.Length) PlayEnding(); else PlayClap(currentMGIndex);
     }
 
+    internal void GenerateEvilProfile()
+    {
+        evilProfile = new EvilProfile()
+        {
+            color = evilColors[Random.Range(0, evilColors.Length)],
+            outfitID = Random.Range(0, evilOutfits.Length)
+        };
+    }
+
     public static GameManager instance
     {
         get { return FindObjectOfType<GameManager>(); }
     }
 
+}
+
+public struct EvilProfile
+{
+    public Color color;
+    public int outfitID;
 }

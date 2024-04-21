@@ -11,6 +11,7 @@ public class Fighter : MiniGame
     public Transform[] points;
     public float maxEnemyTime = 3;
     public float maxQTETime = 4;
+    public float qteDistance;
     public Transform gaugeFuel;
 
     public float cameraOutSize, cameraInSize;
@@ -33,6 +34,7 @@ public class Fighter : MiniGame
     {
         enemies = new List<Enemy>();
         Player.instance.SetVisible(true);
+        Player.instance.ResetPosition();
     }
     internal override void Begin()
     {
@@ -66,7 +68,7 @@ public class Fighter : MiniGame
                 enemies.RemoveAt(i);
                 continue;
             }
-            if(Vector2.Distance(Player.instance.transform.position, enemy.cutout.transform.position) < 2 && enemy.canDetected)
+            if(Vector2.Distance(Player.instance.transform.position, enemy.cutout.transform.position) <= qteDistance && enemy.canDetected)
             {
                 currentEnemy = enemy;
                 enemy.canDetected = false;
@@ -105,6 +107,7 @@ public class Fighter : MiniGame
     {
         if (isBusy) return;
         isBusy = true;
+        SetActiveTimer(false);
 
         foreach(Enemy enemeny in enemies)
         {
@@ -168,11 +171,12 @@ public class Fighter : MiniGame
 
         containerLetters.transform.localPosition = new(12f, -5f, 0);
         isBusy = false;
+        SetActiveTimer(true);
     }
 
-    void SpawnEnemy()
+    void SpawnEnemy() // [!] OUTFIT SYSTEM NEEDED
     {
-        timeForEnemy = maxEnemyTime;
+        timeForEnemy = maxEnemyTime; 
         var clone = Instantiate(Resources.Load<GameObject>($"Prefabs/Enemies/Enemy_{Random.Range(0, 1)}"),Gameplay.layerTR);
         clone.transform.position = points[Random.Range(0, points.Length)].transform.position;
 

@@ -10,7 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d56ce3d9a9e3ecd489e352dec1c3e783, type: 3}
-  m_Name: OutfitTest
+  m_Name: Hat_E1
   m_EditorClassIdentifier: 
-  asset: {fileID: 8129688806858136439, guid: 1fa6b7baf3afee049acb401383aecf0c, type: 3}
-  position: {x: 0, y: 1.612, z: 0}
+  enemyID: 1
+  asset: {fileID: 6627160334867932515, guid: f8a4c7c3da9570744bcbbe7114135350, type: 3}
+  position: {x: 0.051, y: 3.193, z: 0}
