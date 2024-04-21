@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Analytics;
 using UnityEngine.Rendering;
 
 public class Signature : MiniGame
@@ -9,6 +12,7 @@ public class Signature : MiniGame
     public CutoutBehaviour[] cutouts;
     public People[] peoples;
     public int peopleSelected = 0;
+    public TextMeshPro textGUI;
 
     internal override void Setup()
     {
@@ -18,6 +22,15 @@ public class Signature : MiniGame
             peoples[i].cutout = cutouts[i];
             peoples[i].isEvil = Random.Range(0, 100) >= 50f;
             peoples[i].cutout.RandomizeWalkTimer();
+
+            if(peoples[i].isEvil){
+
+                EvilProfile p = GameManager.instance.evilProfile;
+                var a = peoples[i].cutout.transform.Find("Tintable");
+                if (a == null) continue;
+                a.GetComponent<SpriteRenderer>().color = p.color;
+            }
+
         }
 
         peopleSelected = 0;
@@ -52,6 +65,7 @@ public class Signature : MiniGame
         {
             peoples[peopleSelected].isInteracted = true;
             //do some code...
+            VerifyWin();
         }
     }
 
@@ -62,7 +76,32 @@ public class Signature : MiniGame
         {
             peoples[peopleSelected].isInteracted = true;
             //do some code...
+            VerifyWin();
         }
+    }
+
+    void VerifyWin()
+    {
+        var alreadyDenonced = peoples.Count((e) => { return e.isEvil && e.isInteracted; });
+        var alreadyApproved = peoples.Count((e) => { return !e.isEvil && e.isInteracted; });
+        var evils = peoples.Count((e) => { return e.isEvil;  });
+        var kinds = peoples.Count((e) => { return !e.isEvil; });
+
+        textGUI.text = $"{alreadyApproved} / {kinds} approved\r\n{alreadyDenonced} / {evils} DENONCED";
+
+        foreach (var item in peoples)
+        {
+            if (item.isInteracted == false) return;
+            else
+            {
+                EvilProfile p = GameManager.instance.evilProfile;
+                var a = item.cutout.transform.Find("Tintable");
+                if (a == null) continue;
+                a.GetComponent<SpriteRenderer>().color = (item.isEvil ? p.color : Color.white) * new Color(0.5f, 0.5f, 0.5f);
+            }
+        }
+
+        GameWin();
     }
 
     internal void ApplyMovement(int i)

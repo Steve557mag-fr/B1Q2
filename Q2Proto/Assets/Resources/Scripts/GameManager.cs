@@ -127,7 +127,7 @@ public class GameManager : MonoBehaviour
         evilProfile = new EvilProfile()
         {
             color = evilColors[Random.Range(0, evilColors.Length)],
-            outfitID = Random.Range(0, evilOutfits.Length)
+            outfitID = evilOutfits[Random.Range(0, evilOutfits.Length)]
         };
     }
 
@@ -141,5 +141,5 @@ public class GameManager : MonoBehaviour
 public struct EvilProfile
 {
     public Color color;
-    public int outfitID;
+    public Outfit outfitID;
 }

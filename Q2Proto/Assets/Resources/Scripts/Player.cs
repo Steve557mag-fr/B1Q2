@@ -8,6 +8,8 @@ public class Player : MonoBehaviour
     public Vector3 defaultPosition;
     public SpriteRenderer[] spriteSlots;
 
+    public Sprite idle, run;
+
     bool canTween = true;
     bool canTweenOnRotate = true;
 
@@ -21,9 +23,11 @@ public class Player : MonoBehaviour
         var axis = GetAxis(KeyCode.D, KeyCode.A);
         transform.position += Vector3.right * GetAxis(KeyCode.D, KeyCode.A) * speed * Time.deltaTime;
 
-        if (axis == 0 && canTweenOnRotate) return;
+        spriteSlots[0].sprite = (axis == 0) ? idle : run; 
+
+        if (axis == 0 || !canTweenOnRotate) return;
         canTweenOnRotate = false;
-        transform.LeanRotateY(3.14f * (axis > 0 ? 1 : 0), .1f).setOnComplete(() => { canTweenOnRotate = true; });
+        transform.LeanRotateY(180 * (axis > 0 ? 1 : 0), .1f).setOnComplete(() => { canTweenOnRotate = true; });
 
     }
 

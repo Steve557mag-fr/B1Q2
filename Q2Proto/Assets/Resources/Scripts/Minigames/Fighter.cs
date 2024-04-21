@@ -12,7 +12,7 @@ public class Fighter : MiniGame
     public float maxEnemyTime = 3;
     public float maxQTETime = 4;
     public float qteDistance;
-    public Transform gaugeFuel;
+    public TextMeshPro gaugeFuel;
 
     public float cameraOutSize, cameraInSize;
     public float cameraTransitionTime;
@@ -21,6 +21,8 @@ public class Fighter : MiniGame
     public Transform containerLetters;
     public Transform[] stickLetters;
     public TextMeshPro[] letters;
+
+    public float enemyObjectif = 1.30f;
 
     float timeForEnemy, timeForQTE;
     bool isBusy;
@@ -57,6 +59,8 @@ public class Fighter : MiniGame
             return;
         }
 
+        gaugeFuel.text = $"{Mathf.Floor((1 - (timeLeft / 30f)) * 100)} %";
+
         if (timeForEnemy > 0) timeForEnemy = Mathf.Clamp(timeForEnemy - Time.deltaTime, 0, maxEnemyTime);
         else SpawnEnemy();
 
@@ -74,6 +78,12 @@ public class Fighter : MiniGame
                 enemy.canDetected = false;
                 EnterQTE(enemy.cutout.transform.position.x * Vector3.right + Vector3.up * -2.0f + Vector3.forward * -10);
             }
+
+            if( enemyObjectif - enemy.cutout.transform.position.x  < .5f)
+            {
+                GameOver();
+            }
+
         }
     }
     internal override void Over()
@@ -176,9 +186,14 @@ public class Fighter : MiniGame
 
     void SpawnEnemy() // [!] OUTFIT SYSTEM NEEDED
     {
-        timeForEnemy = maxEnemyTime; 
-        var clone = Instantiate(Resources.Load<GameObject>($"Prefabs/Enemies/Enemy_{Random.Range(0, 1)}"),Gameplay.layerTR);
+        timeForEnemy = maxEnemyTime;
+        var enemyID = Random.Range(0, 1);
+        var clone = Instantiate(Resources.Load<GameObject>($"Prefabs/Enemies/Enemy_{enemyID}"),Gameplay.layerTR);
         clone.transform.position = points[Random.Range(0, points.Length)].transform.position;
+
+        EvilProfile p = GameManager.instance.evilProfile;
+        var outfit = Instantiate(p.outfitID.asset, clone.transform);
+        outfit.transform.localPosition = p.outfitID.positions[enemyID].position;
 
         var enemy = new Enemy();
         enemy.cutout = clone.GetComponent<CutoutBehaviour>();
