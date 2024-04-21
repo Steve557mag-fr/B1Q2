@@ -1363,9 +1363,9 @@ MonoBehaviour:
   curtainTime: 1
   bravoSeq: {fileID: 0}
   miniGames:
-  - {fileID: 1386039747}
   - {fileID: 1716165713}
   - {fileID: 1144197622}
+  - {fileID: 1386039747}
   evilColors:
   - {r: 1, g: 0.4481132, b: 0.4481132, a: 1}
   - {r: 0.5424889, g: 0.9622642, b: 0.36765754, a: 1}
