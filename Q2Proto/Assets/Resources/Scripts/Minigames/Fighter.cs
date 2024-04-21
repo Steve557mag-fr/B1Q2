@@ -79,7 +79,7 @@ public class Fighter : MiniGame
                 EnterQTE(enemy.cutout.transform.position.x * Vector3.right + Vector3.up * -2.0f + Vector3.forward * -10);
             }
 
-            if( enemyObjectif - enemy.cutout.transform.position.x  < .5f)
+            if (Mathf.Abs (enemyObjectif - enemy.cutout.transform.position.x) < .5f)
             {
                 GameOver();
             }
