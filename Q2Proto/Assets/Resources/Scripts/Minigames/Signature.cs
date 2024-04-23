@@ -20,7 +20,7 @@ public class Signature : MiniGame
         for(int i = 0; i < cutouts.Length; i++)
         {
             peoples[i].cutout = cutouts[i];
-            peoples[i].isEvil = Random.Range(0, 100) >= 50f;
+            peoples[i].isEvil = Random.Range(0, 100) >= 60f;
             peoples[i].cutout.RandomizeWalkTimer();
 
             if(peoples[i].isEvil){
@@ -42,6 +42,7 @@ public class Signature : MiniGame
     internal override void Begin()
     {
         SetTimer(15);
+        UpdateText();
     }
 
     internal override void Tick()
@@ -80,14 +81,20 @@ public class Signature : MiniGame
         }
     }
 
-    void VerifyWin()
+
+    void UpdateText()
     {
         var alreadyDenonced = peoples.Count((e) => { return e.isEvil && e.isInteracted; });
         var alreadyApproved = peoples.Count((e) => { return !e.isEvil && e.isInteracted; });
-        var evils = peoples.Count((e) => { return e.isEvil;  });
+        var evils = peoples.Count((e) => { return e.isEvil; });
         var kinds = peoples.Count((e) => { return !e.isEvil; });
 
         textGUI.text = $"{alreadyApproved} / {kinds} approved\r\n{alreadyDenonced} / {evils} DENONCED";
+    }
+
+    void VerifyWin()
+    {
+        UpdateText();
 
         foreach (var item in peoples)
         {
