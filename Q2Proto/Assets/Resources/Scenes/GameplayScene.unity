@@ -4833,8 +4833,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 1
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: 0.016900063, y: 0.8288002, z: 0}
-    m_Extent: {x: 9.9935, y: 5.7493, z: 0}
+    m_Center: {x: 0.014649868, y: 0.83229995, z: 0}
+    m_Extent: {x: 9.999149, y: 5.7594004, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -5015,8 +5015,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 1
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -0.059949994, y: -0.12605, z: 0}
-    m_Extent: {x: 1.25855, y: 0.17835, z: 0}
+    m_Center: {x: -0.06010002, y: -0.12505001, z: 0}
+    m_Extent: {x: 1.2632, y: 0.18895, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -10893,38 +10893,18 @@ MonoBehaviour:
   - sprite: {fileID: 21300000, guid: 19c95627862c676429077efaafb4f66b, type: 3}
     pathID: 2
   - sprite: {fileID: 21300000, guid: 119ceb27003241a47afe23efd0f3abc8, type: 3}
-    pathID: 2
-  - sprite: {fileID: 21300000, guid: adef8d17317a767438d5b6633be36a0b, type: 3}
-    pathID: 2
-  - sprite: {fileID: 21300000, guid: f60269c7950ad04468a66ad246ccbd55, type: 3}
-    pathID: 2
+    pathID: 0
   - sprite: {fileID: 21300000, guid: 9bd16c66b78fab94bbe54585732f89f1, type: 3}
-    pathID: 1
-  - sprite: {fileID: 21300000, guid: c0f2eb0bc0782144fa01603a653a1fbc, type: 3}
     pathID: 1
   - sprite: {fileID: 21300000, guid: 08d07c2bd91e3424196ffc7a4171e312, type: 3}
     pathID: 1
-  - sprite: {fileID: 21300000, guid: 5ff8505dede9cf14b86fac89e46768dd, type: 3}
-    pathID: 1
   - sprite: {fileID: 21300000, guid: bb46f9ca778f3f741baf1c65be1b99b2, type: 3}
-    pathID: 1
-  - sprite: {fileID: 21300000, guid: 0a5a0f23712c69149927393f40cb56ca, type: 3}
-    pathID: 1
-  - sprite: {fileID: 21300000, guid: ac2ed6af1f65a254fb44f43bd66a2aae, type: 3}
     pathID: 1
   - sprite: {fileID: 21300000, guid: 8802f306501dee64d94c5faf68f352d4, type: 3}
     pathID: 0
-  - sprite: {fileID: 21300000, guid: e7402a0dc4837064e8ffae8e71f9cbbc, type: 3}
-    pathID: 0
   - sprite: {fileID: 21300000, guid: 20fc0cfce6cafbf4b9ecd8308c68fc4d, type: 3}
     pathID: 0
-  - sprite: {fileID: 21300000, guid: 99b58264fc7af0a429ca444ed37bae0f, type: 3}
-    pathID: 0
   - sprite: {fileID: 21300000, guid: 093c0bb37eb579c48bb1eca77072c647, type: 3}
-    pathID: 0
-  - sprite: {fileID: 21300000, guid: ec1b9b91dccacf44f8c66b849ac36b45, type: 3}
-    pathID: 0
-  - sprite: {fileID: 21300000, guid: ce976d4be9145f147b32f8c724b94fd0, type: 3}
     pathID: 0
   slots:
   - {fileID: 1202490922}
