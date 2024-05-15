@@ -4933,13 +4933,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 1
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-<<<<<<< Updated upstream
-    m_Center: {x: 0.014649868, y: 0.83229995, z: 0}
-    m_Extent: {x: 9.999149, y: 5.7594004, z: 0}
-=======
     m_Center: {x: 0.019350052, y: 0.83075, z: 0}
     m_Extent: {x: 9.99395, y: 5.75135, z: 0}
->>>>>>> Stashed changes
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
