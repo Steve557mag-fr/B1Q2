@@ -11,7 +11,7 @@ public class AnimatorStateHandler : MonoBehaviour
     public void PlayMG()
     {
         GameManager.instance.ToggleCurtain(true);
-        GameManager.instance.GetCurrentMiniGame().GameBegin();
+        LeanTween.delayedCall(2f, GameManager.instance.GetCurrentMiniGame().GameSetup);
     }
 
     public void VerifyPath(int i)

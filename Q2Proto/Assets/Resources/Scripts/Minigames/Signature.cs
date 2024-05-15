@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Analytics;
-using UnityEngine.Rendering;
 
 public class Signature : MiniGame
 {
@@ -84,12 +80,8 @@ public class Signature : MiniGame
 
     void UpdateText()
     {
-        var alreadyDenonced = peoples.Count((e) => { return e.isEvil && e.isInteracted; });
-        var alreadyApproved = peoples.Count((e) => { return !e.isEvil && e.isInteracted; });
-        var evils = peoples.Count((e) => { return e.isEvil; });
-        var kinds = peoples.Count((e) => { return !e.isEvil; });
-
-        textGUI.text = $"{alreadyApproved} / {kinds} approved\r\n{alreadyDenonced} / {evils} DENONCED";
+        var interacted = peoples.Count((e) => { return e.isInteracted; });
+        textGUI.text = $"{interacted} / {peoples.Length}";
     }
 
     void VerifyWin()

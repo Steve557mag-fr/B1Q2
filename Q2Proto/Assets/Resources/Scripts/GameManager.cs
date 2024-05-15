@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
-using UnityEngine.Playables;
 using System;
+using UnityEngine;
+using UnityEngine.Playables;
 using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
@@ -21,7 +19,6 @@ public class GameManager : MonoBehaviour
     [Header("Ending")]
     public PlayableDirector bravoSeq;
 
-
     [SerializeField] MiniGame[] miniGames;
 
     [Header("Evil Settings")]
@@ -29,9 +26,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] Color[] evilColors;
     [SerializeField] Outfit[] evilOutfits;
 
-    int tries = 3;
     [HideInInspector] public int currentMGIndex = 0;
     bool isStarted = false;
+    int tries = 3;
 
     private void Start()
     {
@@ -55,25 +52,29 @@ public class GameManager : MonoBehaviour
         PlayClap(0);
     }
 
+    void ForceResetControllers()
+    {
+        foreach(MiniGame mg in miniGames)
+        {
+            if(mg.Decoration) mg.Decoration.ForceResetAll();
+            if (mg.Gameplay) mg.Gameplay.ForceResetAll();
+            if (mg.Sequences) mg.Sequences.ForceResetAll();
+        }
+    }
+
     public void PlayClap(int iMG)
     {
-        
+        ForceResetControllers();
         clapTriesText.text = $"{tries} tries left";
         clapTitleText.text = miniGames[iMG].title;
         clapDescriptionText.text = miniGames[iMG].description;
         clapAnimator.Play(clapStateName);
-        GetCurrentMiniGame().GameSetup();
     }
 
     public void PlayEnding()
     {
         isStarted = false;
-
-        GetCurrentMiniGame().AllDown(() =>
-        {
-            ToggleCurtain(true);
-            bravoSeq.Play();
-        });
+        bravoSeq.Play();
     }
 
     public void EndSession()

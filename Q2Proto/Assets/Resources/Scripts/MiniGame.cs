@@ -19,33 +19,29 @@ public class MiniGame : MonoBehaviour
     [Header("Layers")]
     public float layerMoveTime = 0.5f;
     public LeanTweenType layerMoveEase;
-    public Layer Gameplay, Sequences, Decoration;
+    public ObjectsAnimatorController Gameplay, Sequences, Decoration;
 
     [HideInInspector] public bool isEnabled;
     bool alreadyLinked = false, timerEnabled = true;
     float time = 0;
+    int ind = 0;
 
     internal void GameSetup()
     {
-        ToggleSceneLayer(Sequences, false);
-        ToggleSceneLayer(Decoration, true);
-        ToggleSceneLayer(Gameplay, true);
+        Gameplay.Play(true);
+        Decoration.Play(true, GameBegin );
+        Sequences.Play(false);
         Setup();
 
         if (alreadyLinked) return;
         alreadyLinked = true;
         seqLoose.stopped += onLooseSeqEnded;
         seqWin.stopped += onWinSeqEnded;
-
     }
     private void onWinSeqEnded(PlayableDirector obj)
     {
         DirectorUtils.CompleteStop(obj);
-
-        GameManager.instance.ToggleCurtain(false, () => {
-            AllDown(() => { GameManager.instance.NextMiniGame(); });
-        });
-
+        GameManager.instance.ToggleCurtain(false, () => { AllDown(); });
     }
     private void onLooseSeqEnded(PlayableDirector obj)
     {
@@ -107,29 +103,22 @@ public class MiniGame : MonoBehaviour
     }
     internal void ShowSeqLayer(Action callback, float delayTime = 0.5f)
     {
-        GameManager.instance.ToggleCurtain(false, () =>
-        {
-            ToggleSceneLayer(Gameplay, false);
-            ToggleSceneLayer(Sequences, true, () =>
-            {
-                GameManager.instance.ToggleCurtain(true, callback);
-            }, delayTime);
-        },0);
-    }
-    internal void ToggleSceneLayer(Layer layer, bool isVisible, Action callback = null, float callDelay = 0f)
-    {
-        layer.layerTR.LeanMoveY(isVisible ? layer.onSceneY : layer.offSceneY, layerMoveTime).setEase(layerMoveEase).setOnComplete(() =>
-        {
-            LeanTween.delayedCall(callDelay, callback);
+        LeanTween.delayedCall(delayTime, ()=>{
+            Gameplay.Play(false);
+            Sequences.Play(true, callback);
         });
     }
-    internal void AllDown(Action callback)
+    internal void AllDown()
     {
-
-        ToggleSceneLayer(Gameplay, false);
-        ToggleSceneLayer(Sequences, false);
-        ToggleSceneLayer(Decoration, false, callback, 1);
-
+        ind = 0;
+        Gameplay.Play(false,   onFinishDown);
+        Decoration.Play(false, onFinishDown);
+        Sequences.Play(false,  onFinishDown);
+    }
+    void onFinishDown()
+    {
+        ind++;
+        if(ind > 3) GameManager.instance.NextMiniGame();
     }
     internal float timeLeft
     {
@@ -139,9 +128,3 @@ public class MiniGame : MonoBehaviour
     #endregion
 }
 
-[System.Serializable]
-public struct Layer
-{
-    public Transform layerTR;
-    public float onSceneY, offSceneY;
-}

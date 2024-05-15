@@ -188,7 +188,7 @@ public class Fighter : MiniGame
     {
         timeForEnemy = maxEnemyTime;
         var enemyID = Random.Range(0, 1);
-        var clone = Instantiate(Resources.Load<GameObject>($"Prefabs/Enemies/Enemy_{enemyID}"),Gameplay.layerTR);
+        var clone = Instantiate(Resources.Load<GameObject>($"Prefabs/Enemies/Enemy_{enemyID}"),Gameplay.transform);
         clone.transform.position = points[Random.Range(0, points.Length)].transform.position;
 
         EvilProfile p = GameManager.instance.evilProfile;

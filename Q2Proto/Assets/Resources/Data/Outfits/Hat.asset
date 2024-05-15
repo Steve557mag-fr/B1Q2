@@ -15,6 +15,6 @@ MonoBehaviour:
   asset: {fileID: 6627160334867932515, guid: f8a4c7c3da9570744bcbbe7114135350, type: 3}
   positions:
   - idEnemy: 0
-    position: {x: 0, y: 0, z: 0}
+    position: {x: 0.268, y: 3.16, z: 0}
   - idEnemy: 1
     position: {x: 0, y: 0, z: 0}

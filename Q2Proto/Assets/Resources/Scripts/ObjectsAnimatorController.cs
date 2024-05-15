@@ -1,0 +1,50 @@
+using System;
+using UnityEngine;
+using UnityEngine.Events;
+
+public class ObjectsAnimatorController : MonoBehaviour
+{
+    [SerializeField] ObjectsAminator[] animators = new ObjectsAminator[0];
+    [SerializeField] UnityEvent events;
+    Action customAction = null;
+    bool canAnimate = false;
+    int ind = 0;
+
+    private void Awake()
+    {
+        canAnimate = true;
+    }
+    public void Play(bool isVisible, Action callback = null, bool forcePlay = false)
+    {
+        if ( animators == null ||animators.Length == 0) return;
+        if (!canAnimate && !forcePlay) return;
+        customAction = callback;
+        canAnimate = false;
+        ind = 0;
+
+        foreach (ObjectsAminator animator in animators)
+        {
+            animator.SetVisible(true, forcePlay, onFinish);
+        }
+    }
+    public void ForceResetAll()
+    {
+        foreach(ObjectsAminator animator in animators)
+        {
+            animator.ForceReset();
+        }
+    }
+
+    void onFinish()
+    {
+        ind++;
+        if(ind < animators.Length)
+        {
+            canAnimate = true;
+            if(customAction != null) customAction.Invoke();
+            customAction = null;
+            events.Invoke();
+        }
+    }
+
+}
