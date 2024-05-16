@@ -1,146 +1,78 @@
-using TMPro;
-using System;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Playables;
-using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
-    [Header("Clap")]
-    public TextMeshPro clapTitleText;
-    public TextMeshPro clapTriesText, clapDescriptionText;
-    public Animator clapAnimator;
-    public string clapStateName;
+    public Menu menu;
+    public ObjectsAnimatorController[] controllers;
 
-    [Header("Curtain")]
-    public Animator curtainAnim;
-    public float curtainTime;
+    public Color[] colors;
+    public Cloth[] cloths;
 
-    [Header("Ending")]
-    public PlayableDirector bravoSeq;
+    public Evil currentEvil;
+    public Minigame[] minigames;
 
-    [SerializeField] MiniGame[] miniGames;
+    public string   nameClap;
+    public Animator animatorClap;
 
-    [Header("Evil Settings")]
-    public EvilProfile evilProfile;
-    [SerializeField] Color[] evilColors;
-    [SerializeField] Outfit[] evilOutfits;
+    public PlayableDirector directorBravo;
 
-    [HideInInspector] public int currentMGIndex = 0;
-    bool isStarted = false;
-    int tries = 3;
-
-    private void Start()
-    {
-        isStarted = false;
-        bravoSeq.stopped += onBravoSeqEnded;
-    }
-
-    void onBravoSeqEnded(PlayableDirector dir)
-    {
-        DirectorUtils.CompleteStop(dir);
-        EndSession();
-    }
+    int currentMinigame = 0;
+    int lifeLeft = 3;
 
     public void StartSession()
     {
-        if (isStarted) return;
-        isStarted = true;
-        tries = 3;
-        currentMGIndex = 0;
-        GenerateEvilProfile();
-        PlayClap(0);
-    }
-
-    void ForceResetControllers()
-    {
-        foreach(MiniGame mg in miniGames)
+        //1. Generate evil profile
+        currentEvil = new()
         {
-            if(mg.Decoration) mg.Decoration.ForceResetAll();
-            if (mg.Gameplay) mg.Gameplay.ForceResetAll();
-            if (mg.Sequences) mg.Sequences.ForceResetAll();
-        }
-    }
+            cloth = cloths[Random.Range(0, cloths.Length)],
+            tint = colors[Random.Range(0, colors.Length)]
+        };
 
-    public void PlayClap(int iMG)
-    {
-        ForceResetControllers();
-        clapTriesText.text = $"{tries} tries left";
-        clapTitleText.text = miniGames[iMG].title;
-        clapDescriptionText.text = miniGames[iMG].description;
-        clapAnimator.Play(clapStateName);
-    }
+        //2. Initialize variables
+        currentMinigame = 0;
+        lifeLeft = 3;
 
-    public void PlayEnding()
-    {
-        isStarted = false;
-        bravoSeq.Play();
-    }
+        //3. Play the clap animation
+        PlayClap();
 
+    }
+    
     public void EndSession()
     {
-        isStarted = false;
-        ToggleCurtain(false, () =>
-        {
-            Menu.instance.ToggleMenuPanel(true, () => { });
-        });
+
     }
 
-    public bool VerifyTries()
+    public void WinSession()
     {
-        tries--;
-        if (tries == 0) EndSession();
-        return tries > 0;
+
     }
 
-
-    public MiniGame GetCurrentMiniGame()
+    public void VerifySession()
     {
-        return miniGames[Math.Clamp(currentMGIndex,0, miniGames.Length-1)];
+        lifeLeft--;
+        if (lifeLeft <= 0) EndSession();
+        else PlayClap();
     }
 
-    public void ToggleCurtain(bool isOpen, Action callback = null, float delayTime = 1)
+    public void NextMG()
     {
-        curtainAnim.SetBool("isOpen",isOpen);
-        LeanTween.delayedCall(curtainTime+delayTime, callback);
+        currentMinigame += 1;
+        if (currentMinigame < minigames.Length) PlayClap();
+        else WinSession();
     }
 
-    public void Update()
-    {
-        if (isStarted && miniGames[currentMGIndex].isEnabled) miniGames[currentMGIndex].GameTick();
-    }
-
-    internal void ReloadMiniGame()
-    {
-        ToggleCurtain(false, () => {
-            PlayClap(currentMGIndex);
-        });
-    }
-
-    internal void NextMiniGame()
-    {
-        currentMGIndex++;
-        if (currentMGIndex >= miniGames.Length) PlayEnding(); else PlayClap(currentMGIndex);
-    }
-
-    internal void GenerateEvilProfile()
-    {
-        evilProfile = new EvilProfile()
-        {
-            color = evilColors[Random.Range(0, evilColors.Length)],
-            outfitID = evilOutfits[Random.Range(0, evilOutfits.Length)]
-        };
-    }
-
-    public static GameManager instance
-    {
-        get { return FindObjectOfType<GameManager>(); }
-    }
+    public void SetupGM() { GetCurrentMG().GameSetup(); }
+    public void PlayClap() { animatorClap.Play(nameClap); }
+    internal Minigame GetCurrentMG() { return minigames[currentMinigame]; }
+    public static GameManager Get() { return FindAnyObjectByType<GameManager>(); }
+    public void Update() { if (GetCurrentMG().isEnabled) GetCurrentMG().GameTick(); }
 
 }
 
-public struct EvilProfile
+public struct Evil
 {
-    public Color color;
-    public Outfit outfitID;
+    public Cloth cloth;
+    public Color tint;
 }

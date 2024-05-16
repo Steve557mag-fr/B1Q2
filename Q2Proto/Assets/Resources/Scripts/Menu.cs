@@ -54,7 +54,7 @@ public class Menu : MonoBehaviour
 
     public void PlayClick()
     {
-        ToggleMenuPanel(false, () => { GameManager.instance.StartSession(); });
+        ToggleMenuPanel(false, () => { GameManager.Get().StartSession(); });
     }
     
     public void QuitApp()

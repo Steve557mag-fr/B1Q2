@@ -38,11 +38,16 @@ public class ObjectsAnimatorController : MonoBehaviour
     void onFinish()
     {
         ind++;
-        if(ind < animators.Length)
+        if(ind >= animators.Length)
         {
+            print(gameObject.name + " is done!");
             canAnimate = true;
-            if(customAction != null) customAction.Invoke();
-            customAction = null;
+            if(customAction != null)
+            {
+                print(customAction);
+                customAction.Invoke();
+                customAction = null;
+            }
             events.Invoke();
         }
     }
