@@ -1155,7 +1155,7 @@ AnimationClip:
   - time: 2.5
     functionName: PlayMG
     data: 
-    objectReferenceParameter: {fileID: 0}
+    objectReferenceParameter: {fileID: 11500000, guid: 7c7bdea774b87f04c8b21f5262b7edf5, type: 3}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0

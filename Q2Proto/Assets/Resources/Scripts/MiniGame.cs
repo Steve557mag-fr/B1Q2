@@ -4,9 +4,9 @@ using UnityEngine.Playables;
 public class Minigame : MonoBehaviour
 {
 	internal bool isEnabled;
-	internal bool isLocked;
-	internal float timeLeft, timeMax;
-	public ObjectsAnimatorController Gameplay, Decoration;
+	internal bool isTimerLocked;
+	internal float timeLeft, timeMax = 30;
+	public ObjectsAnimatorController controllerGameplay, controllerDecoration;
 	public PlayableDirector directorWin, directorLoose;
 	bool isAlreadySetup = false;
 
@@ -35,27 +35,32 @@ public class Minigame : MonoBehaviour
 
     internal void GameSetup()
 	{
+		isTimerLocked = true;
 		timeLeft = timeMax;
-		Gameplay.Play(true);
-        Decoration.Play(true, GameBegin);
-		Setup();
+		print("[MG]: GameSetup");
 
-		if (isAlreadySetup) return;
-		isAlreadySetup = true;
-		directorWin.stopped += OnWinDirectorStopped;
-		directorLoose.stopped += OnLooseDirectorStopped;
+		if (!isAlreadySetup)
+		{
+			isAlreadySetup = true;
+			directorWin.stopped += OnWinDirectorStopped;
+			directorLoose.stopped += OnLooseDirectorStopped;
+		}
+
+		Setup();
+        controllerDecoration.Play(true, () => { controllerGameplay.Play(true, GameBegin); });
+
     }
 
 	internal void GameBegin()
 	{
-		isEnabled = true;
-		isLocked = true;
+        isTimerLocked = false;
+        isEnabled = true;
 		Begin();
 	}
 
     internal void GameTick()
 	{
-		if (isEnabled) timeLeft = Mathf.Clamp(timeLeft - Time.deltaTime, 0, timeMax);
+		if (isEnabled && !isTimerLocked) timeLeft = Mathf.Clamp(timeLeft - Time.deltaTime, 0, timeMax);
 		else return;
 
 		if (timeLeft <= 0) GameOver();
@@ -65,8 +70,10 @@ public class Minigame : MonoBehaviour
     internal void GameOver()
 	{
 		isEnabled = false;
-		isLocked  = false;
-		Gameplay.Play(false, () =>
+		isTimerLocked  = true;
+		print("[MG]: GameOver");
+
+        controllerGameplay.Play(false, () =>
 		{
 			Over();
 			directorLoose.Play();
@@ -76,8 +83,10 @@ public class Minigame : MonoBehaviour
     internal void GameWin()
 	{
         isEnabled = false;
-        isLocked = false;
-		Gameplay.Play(false, () =>
+        isTimerLocked = true;
+		print("[MG]: GameWin");
+        
+		controllerGameplay.Play(false, () =>
 		{
             Win();
             directorWin.Play();

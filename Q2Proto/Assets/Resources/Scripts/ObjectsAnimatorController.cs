@@ -16,6 +16,7 @@ public class ObjectsAnimatorController : MonoBehaviour
     }
     public void Play(bool isVisible, Action callback = null, bool forcePlay = false)
     {
+        print("boub from : " + gameObject.name);
         if ( animators == null ||animators.Length == 0) return;
         if (!canAnimate && !forcePlay) return;
         customAction = callback;
@@ -24,7 +25,7 @@ public class ObjectsAnimatorController : MonoBehaviour
 
         foreach (ObjectsAminator animator in animators)
         {
-            animator.SetVisible(true, forcePlay, onFinish);
+            animator.SetVisible(isVisible, forcePlay, onFinish);
         }
     }
     public void ForceResetAll()

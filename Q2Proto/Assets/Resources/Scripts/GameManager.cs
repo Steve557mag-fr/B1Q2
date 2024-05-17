@@ -1,6 +1,7 @@
-using UnityEditor;
+using System;
 using UnityEngine;
 using UnityEngine.Playables;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,8 +13,10 @@ public class GameManager : MonoBehaviour
     public Menu menu;
     public Evil currentEvil;
     public string   nameClap;
-    public Animator animatorClap;
+    
     public PlayableDirector directorBravo;
+    public Animator animatorClap, animatorCurtain;
+    public float timeCurtain;
 
     int currentMinigame = 0;
     int lifeLeft = 3;
@@ -61,10 +64,12 @@ public class GameManager : MonoBehaviour
     public void NextMG()
     {
         currentMinigame += 1;
-        if (currentMinigame < minigames.Length) PlayClap();
-        else WinSession();
+        if (currentMinigame < minigames.Length) {
+            SetCurtain(false, () => { PlayClap(); });
+        } else WinSession();
     }
 
+    public void SetCurtain(bool isOpen, Action callback) { animatorCurtain.SetBool("isOpen", isOpen); LeanTween.delayedCall(timeCurtain, callback); }
     public void SetupGM() { GetCurrentMG().GameSetup(); }
     public void PlayClap() { animatorClap.Play(nameClap); }
     internal Minigame GetCurrentMG() { return minigames[currentMinigame]; }
