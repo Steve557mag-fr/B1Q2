@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+
+
+
+    public static int GetAxis(KeyCode A, KeyCode B)
     {
-        
+        return System.Convert.ToInt16(Input.GetKey(A)) - System.Convert.ToInt16(Input.GetKey(B));
     }
 
-    // Update is called once per frame
-    void Update()
+    public static int GetAxisDown(KeyCode A, KeyCode B)
     {
-        
+        return System.Convert.ToInt16(Input.GetKeyDown(A)) - System.Convert.ToInt16(Input.GetKeyDown(B));
     }
 }

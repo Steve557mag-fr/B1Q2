@@ -4,18 +4,15 @@ using UnityEngine.Playables;
 
 public class GameManager : MonoBehaviour
 {
-    public Menu menu;
-    public ObjectsAnimatorController[] controllers;
 
     public Color[] colors;
     public Cloth[] cloths;
-
-    public Evil currentEvil;
     public Minigame[] minigames;
 
+    public Menu menu;
+    public Evil currentEvil;
     public string   nameClap;
     public Animator animatorClap;
-
     public PlayableDirector directorBravo;
 
     int currentMinigame = 0;
@@ -23,6 +20,11 @@ public class GameManager : MonoBehaviour
 
     public void StartSession()
     {
+        //0. Reset all minigames
+        foreach(Minigame mg in minigames) {
+            mg.GameReset();
+        }
+
         //1. Generate evil profile
         currentEvil = new()
         {

@@ -9,12 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d56ce3d9a9e3ecd489e352dec1c3e783, type: 3}
+  m_Script: {fileID: 11500000, guid: f05c1cda9321b6f49bd8e732ee02fa12, type: 3}
   m_Name: Hat
   m_EditorClassIdentifier: 
-  asset: {fileID: 6627160334867932515, guid: f8a4c7c3da9570744bcbbe7114135350, type: 3}
-  positions:
-  - idEnemy: 0
-    position: {x: 0.268, y: 3.16, z: 0}
-  - idEnemy: 1
-    position: {x: 0, y: 0, z: 0}
+  prefab: {fileID: 6627160334867932515, guid: f8a4c7c3da9570744bcbbe7114135350, type: 3}
+  offset: {x: 0, y: 1.4, z: 0}

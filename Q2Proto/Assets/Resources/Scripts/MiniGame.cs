@@ -28,6 +28,11 @@ public class Minigame : MonoBehaviour
 
     #region GameMethods
 
+    internal void GameReset()
+    {
+        
+    }
+
     internal void GameSetup()
 	{
 		timeLeft = timeMax;
