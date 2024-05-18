@@ -15,13 +15,13 @@ public class Minigame : MonoBehaviour
     private void OnLooseDirectorStopped(PlayableDirector obj)
     {
 		DirectorUtils.CompleteStop(obj);
-		GameManager.Get().VerifySession();
+		if(GameManager.Get()) GameManager.Get().VerifySession();
     }
 
     private void OnWinDirectorStopped(PlayableDirector obj)
     {
         DirectorUtils.CompleteStop(obj);
-        GameManager.Get().NextMG();
+        if (GameManager.Get()) GameManager.Get().NextMG();
     }
 
     #endregion
@@ -30,7 +30,8 @@ public class Minigame : MonoBehaviour
 
     internal void GameReset()
     {
-        
+		controllerDecoration.ForceResetAll();
+		controllerGameplay.ForceResetAll();
     }
 
     internal void GameSetup()
@@ -72,12 +73,12 @@ public class Minigame : MonoBehaviour
 		isEnabled = false;
 		isTimerLocked  = true;
 		print("[MG]: GameOver");
+		Over();
 
         controllerGameplay.Play(false, () =>
 		{
-			Over();
 			directorLoose.Play();
-		});
+		}, true);
 	}
 
     internal void GameWin()
@@ -85,10 +86,10 @@ public class Minigame : MonoBehaviour
         isEnabled = false;
         isTimerLocked = true;
 		print("[MG]: GameWin");
+        Win();
         
 		controllerGameplay.Play(false, () =>
 		{
-            Win();
             directorWin.Play();
         });
     }

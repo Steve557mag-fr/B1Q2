@@ -9,4 +9,8 @@ public class AnimatorStateHandler : MonoBehaviour
         GameManager.Get().SetCurtain(true, GameManager.Get().GetCurrentMG().GameSetup);
     }
 
+    public void VerifyPath(int index)
+    {
+        ((SpaceTraver)GameManager.Get().GetCurrentMG()).VerifyAnswer(index);
+    }
 }

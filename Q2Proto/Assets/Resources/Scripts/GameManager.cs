@@ -46,7 +46,10 @@ public class GameManager : MonoBehaviour
     
     public void EndSession()
     {
-
+        SetCurtain(false, () =>
+        {
+            Menu.instance.ToggleMenuPanel(true,null);
+        });
     }
 
     public void WinSession()

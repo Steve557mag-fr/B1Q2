@@ -14,7 +14,7 @@ public class ObjectsAnimatorController : MonoBehaviour
     {
         canAnimate = true;
     }
-    public void Play(bool isVisible, Action callback = null, bool forcePlay = false)
+    public void Play(bool isVisible, Action callback = null, bool forcePlay = true)
     {
         print("boub from : " + gameObject.name);
         if ( animators == null ||animators.Length == 0) return;
