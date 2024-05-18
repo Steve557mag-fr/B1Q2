@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Fighter : Minigame
 {
     [SerializeField] float spawnRate, attackRange, QTETimeMax, objective;
     [SerializeField] GameObject enemyPrefab;
     [SerializeField] Transform a, b;
+    [SerializeField] TextMeshPro textPercent;
 
     List<CutoutBehaviour> cutouts;
     CutoutBehaviour target;
@@ -23,7 +25,7 @@ public class Fighter : Minigame
     internal override void Tick()
     {
 
-
+        textPercent.text = $"{Mathf.RoundToInt((1 - (timeLeft / timeMax)) * 100)} %";
 
         foreach(CutoutBehaviour cutout in cutouts)
         {

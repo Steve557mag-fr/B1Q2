@@ -66,13 +66,26 @@ public class GameManager : MonoBehaviour
 
     public void NextMG()
     {
-        currentMinigame += 1;
-        if (currentMinigame < minigames.Length) {
-            SetCurtain(false, () => { PlayClap(); });
-        } else WinSession();
+
+        SetCurtain(false, () => {
+            GetCurrentMG().GameReset();
+            currentMinigame += 1;
+            if (currentMinigame < minigames.Length) {
+                PlayClap();
+            } else WinSession();
+        });
+
     }
 
-    public void SetCurtain(bool isOpen, Action callback) { animatorCurtain.SetBool("isOpen", isOpen); LeanTween.delayedCall(timeCurtain, callback); }
+    public void SetCurtain(bool isOpen, Action callback) {
+        string animName = isOpen ? "Open" : "Close";
+        animatorCurtain.SetTrigger (animName);
+        LeanTween.delayedCall(timeCurtain, () =>
+        {
+            animatorCurtain.ResetTrigger(animName);
+            callback();
+        });
+    }
     public void SetupGM() { GetCurrentMG().GameSetup(); }
     public void PlayClap() { animatorClap.Play(nameClap); }
     internal Minigame GetCurrentMG() { return minigames[currentMinigame]; }
