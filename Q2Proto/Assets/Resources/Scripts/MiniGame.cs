@@ -36,7 +36,6 @@ public class Minigame : MonoBehaviour
 
     internal void GameSetup()
 	{
-		isTimerLocked = true;
 		timeLeft = timeMax;
 		print("[MG]: GameSetup");
 
@@ -54,7 +53,6 @@ public class Minigame : MonoBehaviour
 
 	internal void GameBegin()
 	{
-        isTimerLocked = false;
         isEnabled = true;
 		Begin();
 	}
@@ -71,7 +69,6 @@ public class Minigame : MonoBehaviour
     internal void GameOver()
 	{
 		isEnabled = false;
-		isTimerLocked  = true;
 		print("[MG]: GameOver");
 		Over();
 
@@ -84,7 +81,6 @@ public class Minigame : MonoBehaviour
     internal void GameWin()
 	{
         isEnabled = false;
-        isTimerLocked = true;
 		print("[MG]: GameWin");
         Win();
         

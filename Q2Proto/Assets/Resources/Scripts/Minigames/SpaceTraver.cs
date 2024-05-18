@@ -37,14 +37,17 @@ public class SpaceTraver : Minigame
     internal override void Tick()
     {
 
-        if (isTimerLocked) return;
+        if (isTimerLocked) { print("locked"); return; }
 
         float currBarValue = scaleTimeBar * (timeLeft / timingByAnswers[currAnswer]);
         currentTimeBar.transform.localScale = new Vector3(currBarValue , currentTimeBar.transform.localScale.y, currentTimeBar.transform.localScale.z);
 
+        print("Key");
+        print(Player.Get());
+
         if (Input.GetKeyDown(Player.Get().Action1)) PlayPath(0);
-        else if (Input.GetKeyDown(Player.Get().Action2)) PlayPath(1);
-        else if (Input.GetKeyDown(Player.Get().Action3)) PlayPath(2);
+        if (Input.GetKeyDown(Player.Get().Action2)) PlayPath(1);
+        if (Input.GetKeyDown(Player.Get().Action3)) PlayPath(2);
 
     }
 
@@ -89,8 +92,8 @@ public class SpaceTraver : Minigame
 
         for(int i = 0; i < pieceSlots.Length; i++)
         {
-            pieceSlots[i].sprite = pieces[i].sprite;
-            indicatorPaths[i].sprite = (i == goodPath) ? null : badIndicator;
+            pieceSlots[i].sprite = currentPaths[i].sprite;
+            indicatorPaths[2-i].sprite = (i == goodPath) ? null : badIndicator;
         }
 
         textSignState.text = $"{currAnswer}/3";

@@ -21,7 +21,7 @@ public class Player : MonoBehaviour
     
     public static Player Get()
     {
-        return FindAnyObjectByType<Player>();
+        return FindFirstObjectByType<Player>();
     }
 
 }
