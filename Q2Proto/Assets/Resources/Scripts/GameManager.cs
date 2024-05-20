@@ -21,10 +21,15 @@ public class GameManager : MonoBehaviour
     int currentMinigame = 0;
     int lifeLeft = 3;
 
+    bool canStart = true;
+
     public void StartSession()
     {
+        if (!canStart) return;
+        canStart = false;
+
         //0. Reset all minigames
-        foreach(Minigame mg in minigames) {
+        foreach (Minigame mg in minigames) {
             mg.GameReset();
         }
 
@@ -49,12 +54,13 @@ public class GameManager : MonoBehaviour
         SetCurtain(false, () =>
         {
             Menu.instance.ToggleMenuPanel(true,null);
+            canStart = true;
         });
     }
 
     public void WinSession()
     {
-
+        canStart = true;
     }
 
     public void VerifySession()

@@ -75,7 +75,7 @@ public class CutoutBehaviour : MonoBehaviour
 
     float getHeight
     {
-        get { return groundHeight + (localSpaceHeight ? 1 : 0) * (transform.parent == null? 0 : transform.parent.transform.position.y); }
+        get { return groundHeight + (localSpaceHeight ? 1 : 0) * (transform.parent == null ? 0 : transform.parent.transform.position.y); }
     }
 
 }

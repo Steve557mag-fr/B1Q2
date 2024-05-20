@@ -10,6 +10,8 @@ public class Minigame : MonoBehaviour
 	public PlayableDirector directorWin, directorLoose;
 	bool isAlreadySetup = false;
 
+	internal bool wincase = false;
+
     #region Directors
 
     private void OnLooseDirectorStopped(PlayableDirector obj)
@@ -62,7 +64,10 @@ public class Minigame : MonoBehaviour
 		if (isEnabled && !isTimerLocked) timeLeft = Mathf.Clamp(timeLeft - Time.deltaTime, 0, timeMax);
 		else return;
 
-		if (timeLeft <= 0) GameOver();
+		if (timeLeft <= 0) {
+			if (wincase) GameWin();
+			else GameOver();
+		}
 		else Tick();
     }
 
@@ -87,7 +92,7 @@ public class Minigame : MonoBehaviour
 		controllerGameplay.Play(false, () =>
 		{
             directorWin.Play();
-        });
+        },true);
     }
 
     #endregion

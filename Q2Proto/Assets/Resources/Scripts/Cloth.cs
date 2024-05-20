@@ -5,5 +5,5 @@ using UnityEngine;
 public class Cloth : ScriptableObject
 {
     public GameObject prefab;
-    public Vector3 offset;
+    public Vector3[] offsets;
 }

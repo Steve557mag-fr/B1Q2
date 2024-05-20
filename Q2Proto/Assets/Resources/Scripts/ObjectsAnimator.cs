@@ -59,11 +59,11 @@ public class ObjectsAminator : MonoBehaviour
 
     public Vector3 VisiblePosition
     {
-        get { return (isLocalPosition ? transform.position : Vector3.zero) + visiblePosition; }
+        get { return (isLocalPosition ? transform.parent.position : Vector3.zero) + visiblePosition; }
     }
     public Vector3 InvisiblePosition
     {
-        get { return (isLocalPosition ? transform.position : Vector3.zero) + invisiblePosition; }
+        get { return (isLocalPosition ? transform.parent.position : Vector3.zero) + invisiblePosition; }
     }
 
 }
