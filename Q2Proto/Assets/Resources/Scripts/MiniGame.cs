@@ -9,7 +9,6 @@ public class Minigame : MonoBehaviour
 	public ObjectsAnimatorController controllerGameplay, controllerDecoration;
 	public PlayableDirector directorWin, directorLoose;
 	bool isAlreadySetup = false;
-
 	internal bool wincase = false;
 
     #region Directors
@@ -38,6 +37,7 @@ public class Minigame : MonoBehaviour
 
     internal void GameSetup()
 	{
+		wincase = true;
 		timeLeft = timeMax;
 		print("[MG]: GameSetup");
 

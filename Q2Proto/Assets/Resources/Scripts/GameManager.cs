@@ -100,6 +100,7 @@ public class GameManager : MonoBehaviour
 
 }
 
+[System.Serializable]
 public struct Evil
 {
     public Cloth cloth;

@@ -72,7 +72,6 @@ public class SpaceTraver : Minigame
     {
 
         timeLeft = timingByAnswers[currAnswer];
-
         goodPath = Random.Range(0, 3);
 
         var possibilities = pieces.FindAll((Piece p) => { return p.goodIndex == goodPath; });

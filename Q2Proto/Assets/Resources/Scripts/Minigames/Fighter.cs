@@ -37,6 +37,7 @@ public class Fighter : Minigame
         QTETicking = false;
         isBusy = false;
         timeQTE = maxQTETime;
+        playerScene.isLocked = false;
     }
 
     internal override void Tick()
@@ -84,11 +85,22 @@ public class Fighter : Minigame
     internal override void Over()
     {
         ZoomOut();
+        KillAll();
     }
 
     internal override void Win()
     {
         ZoomOut();
+        KillAll();
+    }
+
+    void KillAll()
+    {
+        for(int i = 0; i < cutouts.Count; i++)
+        {
+            if (cutouts[i] == null) continue;
+            Destroy(cutouts[i].gameObject);
+        }
     }
 
     void TickQTE()
@@ -125,6 +137,10 @@ public class Fighter : Minigame
         }
         currKey = 0;
 
+
+        // Lock Player
+        playerScene.isLocked = true;
+
         // Camera Focus
         Camera.main.transform.LeanMoveX(playerScene.transform.position.x,timeCameraQte).setEase(easeCameraQte);
         Camera.main.transform.LeanMoveY(-2, timeCameraQte).setEase(easeCameraQte);
@@ -160,8 +176,13 @@ public class Fighter : Minigame
         timeQTE = maxQTETime;
         QTETicking = false;
 
+        // Destroy the target
         Destroy(target.gameObject);
 
+        // Unlock the player scene
+        playerScene.isLocked = false;
+
+        // Re-Enable the cutouts
         foreach (CutoutBehaviour cutout in cutouts)
         {
             if (cutout == null) continue;

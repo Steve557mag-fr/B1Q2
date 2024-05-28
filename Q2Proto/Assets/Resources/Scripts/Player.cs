@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
 {
 
     public KeyCode Action1, Action2, Action3;
+    public KeyCode Left, Right;
 
     public KeyCode[] Actions { get { return new KeyCode[] { Action1, Action2, Action3 }; } }
 

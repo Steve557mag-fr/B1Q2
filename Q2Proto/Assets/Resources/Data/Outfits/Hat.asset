@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: Hat
   m_EditorClassIdentifier: 
   prefab: {fileID: 6627160334867932515, guid: f8a4c7c3da9570744bcbbe7114135350, type: 3}
-  offset: {x: 0, y: 1.4, z: 0}
+  offsets:
+  - {x: 0.272, y: 3.238, z: 0}
