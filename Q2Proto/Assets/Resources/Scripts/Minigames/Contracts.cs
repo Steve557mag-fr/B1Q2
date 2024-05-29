@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class Contracts : Minigame
 {
+    public float scaleTimeBar;
+    public GameObject currentTimeBar;
     public RigidMovement playerScene;
     public GameObject[] cutoutPrefabs;
     public Transform[] points;
@@ -44,6 +46,10 @@ public class Contracts : Minigame
     internal override void Tick()
     {
 
+        float currBarValue = scaleTimeBar * (timeLeft / timeMax);
+        currentTimeBar.transform.localScale = new Vector3(currBarValue, currentTimeBar.transform.localScale.y, currentTimeBar.transform.localScale.z);
+
+
         int countInteractabled = 0;
         for(int i = 0; i < enemies.Length; i++)
         {
@@ -67,7 +73,12 @@ public class Contracts : Minigame
     }
 
     internal override void Over() {  KillAll(); }
-    
+
+    internal override void OnReset()
+    {
+        KillAll();
+    }
+
     void ToLeft()
     {
         if (lockPosition) return;
@@ -96,6 +107,10 @@ public class Contracts : Minigame
         {
             enemies[currentIndex].alreadyApproved = true;
             enemies[currentIndex].cutout.GetComponent<CutoutBehaviour>().enabled = false;
+            foreach(SpriteRenderer spr in enemies[currentIndex].cutout.GetComponentsInChildren<SpriteRenderer>())
+            {
+                spr.color = new Color(0.5f,0.5f,0.5f,1.0f);
+            }
         }
 
     }
@@ -118,8 +133,11 @@ public class Contracts : Minigame
 
     void KillAll()
     {
+        if(enemies == null || enemies.Length == 0) return;
+
         for(int i= 0;i < enemies.Length; i++)
         {
+            if (enemies[i].cutout == null) continue;
             Destroy(enemies[i].cutout);
         }
     }

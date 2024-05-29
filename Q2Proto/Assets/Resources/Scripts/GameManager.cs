@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Playables;
 using Random = UnityEngine.Random;
@@ -18,10 +19,13 @@ public class GameManager : MonoBehaviour
     public Animator animatorClap, animatorCurtain;
     public float timeCurtain;
 
+    public TextMeshPro txtTitle, txtDescription, txtLife;
+
     int currentMinigame = 0;
     int lifeLeft = 3;
 
     bool canStart = true;
+    bool sessionEnabled = false;
 
     public void StartSession()
     {
@@ -45,8 +49,8 @@ public class GameManager : MonoBehaviour
         lifeLeft = 3;
 
         //3. Play the clap animation
+        sessionEnabled = true;
         PlayClap();
-
     }
     
     public void EndSession()
@@ -58,9 +62,22 @@ public class GameManager : MonoBehaviour
         });
     }
 
+    bool alreadyBravo;
     public void WinSession()
     {
-        canStart = true;
+        sessionEnabled = false;
+
+        SetCurtain(true, () =>
+        {
+            directorBravo.Play();
+        });
+
+        if (alreadyBravo) return;
+        alreadyBravo = true;
+        directorBravo.stopped += (PlayableDirector d) =>
+        {
+            EndSession();
+        };  
     }
 
     public void VerifySession()
@@ -72,13 +89,20 @@ public class GameManager : MonoBehaviour
 
     public void NextMG()
     {
-
+        sessionEnabled = false;
+        print("lock session");
         SetCurtain(false, () => {
             GetCurrentMG().GameReset();
             currentMinigame += 1;
             if (currentMinigame < minigames.Length) {
+                print("unlock session");
+                sessionEnabled = true;
                 PlayClap();
-            } else WinSession();
+            } else
+            {
+                print("still lock session");
+                WinSession();
+            };
         });
 
     }
@@ -93,10 +117,25 @@ public class GameManager : MonoBehaviour
         });
     }
     public void SetupGM() { GetCurrentMG().GameSetup(); }
-    public void PlayClap() { animatorClap.Play(nameClap); }
-    internal Minigame GetCurrentMG() { return minigames[currentMinigame]; }
+    public void PlayClap() {
+
+        txtTitle.text = GetCurrentMG().title;
+        txtDescription.text = GetCurrentMG().description;
+        txtLife.text = $"{lifeLeft} LIVES LEFT";
+        animatorClap.Play(nameClap);
+    }
+    internal Minigame GetCurrentMG() { return minigames[Mathf.Clamp(currentMinigame,0,minigames.Length-1)]; }
     public static GameManager Get() { return FindAnyObjectByType<GameManager>(); }
-    public void Update() { if (GetCurrentMG().isEnabled) GetCurrentMG().GameTick(); }
+    public void Update() {
+        if (GetCurrentMG().isEnabled && sessionEnabled)
+        {
+            GetCurrentMG().GameTick();
+        }
+
+        if (Input.GetKeyDown(KeyCode.KeypadPlus)) GetCurrentMG().GameWin();
+        if (Input.GetKeyDown(KeyCode.KeypadMinus)) GetCurrentMG().GameOver();
+
+    }
 
 }
 

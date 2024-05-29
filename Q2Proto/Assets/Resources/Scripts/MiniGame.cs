@@ -3,6 +3,7 @@ using UnityEngine.Playables;
 
 public class Minigame : MonoBehaviour
 {
+	[SerializeField] internal string title, description;
 	internal bool isEnabled;
 	internal bool isTimerLocked;
 	internal float timeLeft, timeMax = 30;
@@ -33,6 +34,7 @@ public class Minigame : MonoBehaviour
     {
 		controllerDecoration.ForceResetAll();
 		controllerGameplay.ForceResetAll();
+		OnReset();
     }
 
     internal void GameSetup()
@@ -104,7 +106,8 @@ public class Minigame : MonoBehaviour
     internal virtual void Tick()	{ }
     internal virtual void Over()	{ }
 	internal virtual void Win()		{ }
-	
+	internal virtual void OnReset() { }
+
 	#endregion
 
 }

@@ -30,6 +30,7 @@ public class SpaceTraver : Minigame
 
     internal override void Begin()
     {
+        currAnswer = 0;
         ToggleAnimators(true);
         GenerateNewCase();
     }
@@ -113,7 +114,7 @@ public class SpaceTraver : Minigame
         {
             //win state
             currAnswer++;
-
+            textSignState.text = $"{currAnswer}/3";
             if (currAnswer >= MAX_ANSW) GameWin();
             else GenerateNewCase();
         }

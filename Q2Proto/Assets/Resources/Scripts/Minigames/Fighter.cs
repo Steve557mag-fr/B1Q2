@@ -7,7 +7,8 @@ using Unity.VisualScripting;
 public class Fighter : Minigame
 {
     [SerializeField] float spawnRate, attackRange, QTETimeMax, objective, minFocus, maxFocus;
-    [SerializeField] GameObject enemyPrefab;
+    [SerializeField] GameObject carScene;
+    [SerializeField] GameObject[] enemyPrefabs;
     [SerializeField] RigidMovement playerScene;
     [SerializeField] Transform a, b;
     [SerializeField] TextMeshPro textPercent;
@@ -30,6 +31,7 @@ public class Fighter : Minigame
 
     internal override void Setup()
     {
+        carScene.SetActive(true);
         cutouts = new List<CutoutBehaviour>();
         qte = new KeyCode[3];
         keys = Player.Get().Actions;
@@ -92,6 +94,7 @@ public class Fighter : Minigame
     {
         ZoomOut();
         KillAll();
+        carScene.SetActive(false);
     }
 
     void KillAll()
@@ -199,7 +202,7 @@ public class Fighter : Minigame
         Camera.main.transform.LeanMoveY(0, timeCameraQte).setEase(easeCameraQte);
         LeanTween.value(1, 0, timeCameraQte).setOnUpdate((float v) =>
         {
-            Camera.main.orthographicSize = Mathf.Lerp(minFocus, maxFocus, v);
+            Camera.main.orthographicSize = Mathf.Lerp(maxFocus, minFocus, v);
 
         }).setEase(easeCameraQte).setOnComplete(() =>
         {
@@ -216,10 +219,10 @@ public class Fighter : Minigame
 
     GameObject GetEnemyInstance()
     {
-        int enemyID = 0;
+        int enemyID = Random.Range(0, 100) > 60 ? 0 : 1;
         Evil currEvil = GameManager.Get().currentEvil;
         
-        GameObject enemy = Instantiate(enemyPrefab, points[Random.Range(0, 100) > 50 ? 0 : 1].position, Quaternion.identity);
+        GameObject enemy = Instantiate(enemyPrefabs[enemyID], points[Random.Range(0, 100) > 60 ? 0 : 1].position, Quaternion.identity);
         GameObject clothEnemy = Instantiate(currEvil.cloth.prefab, enemy.transform);
         clothEnemy.transform.localPosition = currEvil.cloth.offsets[enemyID];
         if(clothEnemy.transform.Find("Tintable")) clothEnemy.transform.Find("Tintable").GetComponent<SpriteRenderer>().color = currEvil.tint;

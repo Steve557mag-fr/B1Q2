@@ -834,7 +834,7 @@ PlayableDirector:
   m_Enabled: 1
   serializedVersion: 3
   m_PlayableAsset: {fileID: 11400000, guid: e26b7ed7cdbe0174e8a464f78892503b, type: 2}
-  m_InitialState: 1
+  m_InitialState: 0
   m_WrapMode: 2
   m_DirectorUpdateMode: 1
   m_InitialTime: 0
@@ -1931,18 +1931,21 @@ MonoBehaviour:
   cloths:
   - {fileID: 11400000, guid: c07eaf3c1993a9342ae8f1d4ef27b302, type: 2}
   minigames:
-  - {fileID: 1386039747}
   - {fileID: 1716165713}
   - {fileID: 1144197622}
+  - {fileID: 1386039747}
   menu: {fileID: 941948954}
   currentEvil:
     cloth: {fileID: 0}
     tint: {r: 0, g: 0, b: 0, a: 0}
   nameClap: clap
-  directorBravo: {fileID: 0}
+  directorBravo: {fileID: 35613838}
   animatorClap: {fileID: 1987740554}
   animatorCurtain: {fileID: 2042663768}
   timeCurtain: 2
+  txtTitle: {fileID: 1767211686}
+  txtDescription: {fileID: 1166612781}
+  txtLife: {fileID: 844217112}
 --- !u!1 &218892598
 GameObject:
   m_ObjectHideFlags: 0
@@ -2982,7 +2985,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 5
   m_Sprite: {fileID: 21300000, guid: f578b9d0b382d6d4d8273f49817889ab, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -5674,6 +5677,7 @@ MonoBehaviour:
   animators:
   - {fileID: 1989790694}
   - {fileID: 471122281}
+  - {fileID: 478573988}
   events:
     m_PersistentCalls:
       m_Calls: []
@@ -5865,8 +5869,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 1
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: 0.01154995, y: 0.8353498, z: 0}
-    m_Extent: {x: 9.99115, y: 5.7540503, z: 0}
+    m_Center: {x: 0.010250092, y: 0.8336499, z: 0}
+    m_Extent: {x: 10.00195, y: 5.7498503, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -6418,7 +6422,7 @@ Transform:
   m_GameObject: {fileID: 730797377}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.04312229, y: 2.056273, z: 0}
+  m_LocalPosition: {x: 0.04312229, y: 1.643, z: 0}
   m_LocalScale: {x: 0.5248664, y: 0.64897484, z: 0.51255}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6464,7 +6468,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 5
   m_Sprite: {fileID: 21300000, guid: f578b9d0b382d6d4d8273f49817889ab, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -7670,6 +7674,18 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 1
             m_CallState: 2
+          - m_Target: {fileID: 941948954}
+            m_TargetAssemblyTypeName: Menu, Assembly-CSharp
+            m_MethodName: SetSetInteractionIndex
+            m_Mode: 3
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 1
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 1
+            m_CallState: 2
       yPosition: 187.6
     - interaction:
         m_PersistentCalls:
@@ -7707,6 +7723,18 @@ MonoBehaviour:
             m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
             m_MethodName: SetActive
             m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: 941948954}
+            m_TargetAssemblyTypeName: Menu, Assembly-CSharp
+            m_MethodName: SetSetInteractionIndex
+            m_Mode: 3
             m_Arguments:
               m_ObjectArgument: {fileID: 0}
               m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -9607,6 +9635,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 541e541453636ba42882b3decab8c5d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  title: 
+  description: Defence your vehicle!
   controllerGameplay: {fileID: 630825785}
   controllerDecoration: {fileID: 1201330175}
   directorWin: {fileID: 1603558713}
@@ -9617,7 +9647,10 @@ MonoBehaviour:
   objective: 1.3
   minFocus: 4.5
   maxFocus: 5.5
-  enemyPrefab: {fileID: 880535078054492629, guid: 4c09b297c09651c49abec07a22566ade, type: 3}
+  carScene: {fileID: 1497716435}
+  enemyPrefabs:
+  - {fileID: 880535078054492629, guid: 4c09b297c09651c49abec07a22566ade, type: 3}
+  - {fileID: 5250756615849156637, guid: 6fab9e3b345978b4ea582fc07bec03ac, type: 3}
   playerScene: {fileID: 1694877373}
   a: {fileID: 1078970168}
   b: {fileID: 804087737}
@@ -11792,10 +11825,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47267c974ff143946b3208f5dd0fb176, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  title: 
+  description: Denonce the enemies!
   controllerGameplay: {fileID: 626979177}
   controllerDecoration: {fileID: 1492888444}
   directorWin: {fileID: 1488463795}
   directorLoose: {fileID: 30974371}
+  scaleTimeBar: 7.63
+  currentTimeBar: {fileID: 1405589684}
   playerScene: {fileID: 471122280}
   cutoutPrefabs:
   - {fileID: 403390772299111620, guid: 937a050b3b98b87408acfd12e1ff7c5f, type: 3}
@@ -14805,6 +14842,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd2cc9c320fc1ab408fdfe1efc85d3a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  title: 
+  description: Find your way!
   controllerGameplay: {fileID: 103712217}
   controllerDecoration: {fileID: 1284429272}
   directorWin: {fileID: 1467964440}
@@ -16313,7 +16352,7 @@ RectTransform:
   m_GameObject: {fileID: 1864059590}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
+  m_LocalScale: {x: 0.33, y: 0.33, z: 0.33}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1628616650}
@@ -16343,7 +16382,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ac1bccce741226c41a8747e6f649586b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7c9556e0939494c4596abf9e994a5c5f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
