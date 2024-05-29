@@ -2683,7 +2683,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 5
+  m_SortingOrder: 6
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0.9575472, g: 0.9950966, b: 1, a: 1}
   m_FlipX: 0
@@ -5869,8 +5869,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 1
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: 0.010250092, y: 0.8336499, z: 0}
-    m_Extent: {x: 10.00195, y: 5.7498503, z: 0}
+    m_Center: {x: 0.013949871, y: 0.8355, z: 0}
+    m_Extent: {x: 9.99715, y: 5.7496996, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -9635,8 +9635,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 541e541453636ba42882b3decab8c5d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: 
-  description: Defence your vehicle!
+  title: Fight
+  description: 'The vehicle is refueling, defend the package '
   controllerGameplay: {fileID: 630825785}
   controllerDecoration: {fileID: 1201330175}
   directorWin: {fileID: 1603558713}
@@ -11825,8 +11825,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47267c974ff143946b3208f5dd0fb176, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: 
-  description: Denonce the enemies!
+  title: Denonce or Approve
+  description: Give the papers to the right people, watch out for clues of traitors
   controllerGameplay: {fileID: 626979177}
   controllerDecoration: {fileID: 1492888444}
   directorWin: {fileID: 1488463795}
@@ -12001,7 +12001,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 5
+  m_SortingOrder: 6
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0.9575472, g: 0.9950966, b: 1, a: 1}
   m_FlipX: 0
@@ -14842,8 +14842,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd2cc9c320fc1ab408fdfe1efc85d3a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: 
-  description: Find your way!
+  title: Travel
+  description: 'Find your way to the space council '
   controllerGameplay: {fileID: 103712217}
   controllerDecoration: {fileID: 1284429272}
   directorWin: {fileID: 1467964440}
