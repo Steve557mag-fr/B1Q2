@@ -19,6 +19,8 @@ public class RigidMovement : MonoBehaviour
         transform.position += Vector3.right * input * speed * Time.deltaTime;
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, sceneMin, sceneMax), transform.position.y);
 
+        renderPlayer.sprite = input == 0 ? spriteIdle : spriteRun;
+
         if (input == 0) return;
         renderPlayer.flipX = System.Convert.ToBoolean(Mathf.Max(0, Mathf.Sign(input)));
 

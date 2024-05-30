@@ -225,7 +225,7 @@ public class Fighter : Minigame
         GameObject enemy = Instantiate(enemyPrefabs[enemyID], points[Random.Range(0, 100) > 60 ? 0 : 1].position, Quaternion.identity);
         GameObject clothEnemy = Instantiate(currEvil.cloth.prefab, enemy.transform);
         clothEnemy.transform.localPosition = currEvil.cloth.offsets[enemyID];
-        if(clothEnemy.transform.Find("Tintable")) clothEnemy.transform.Find("Tintable").GetComponent<SpriteRenderer>().color = currEvil.tint;
+        if(enemy.transform.Find("Tintable")) enemy.transform.Find("Tintable").GetComponent<SpriteRenderer>().color = currEvil.tint;
 
         cutouts.Add(enemy.GetComponent<CutoutBehaviour>());
 
