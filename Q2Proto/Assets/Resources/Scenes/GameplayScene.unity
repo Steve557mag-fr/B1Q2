@@ -5871,8 +5871,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 1
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: 0.010799885, y: 0.83220005, z: 0}
-    m_Extent: {x: 10.002701, y: 5.7514, z: 0}
+    m_Center: {x: 0.00880003, y: 0.8324499, z: 0}
+    m_Extent: {x: 9.993401, y: 5.74865, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -7750,7 +7750,7 @@ MonoBehaviour:
   currentSet: 0
   canNavigate: 1
   menuPanel: {fileID: 190693863}
-  menuPanelOffScreen: -450
+  menuPanelOffScreen: -1000
   menuPanelOnScreen: 50
   menuPanelTransitionTime: 0.25
   menuPanelTransitionType: 32
@@ -12016,7 +12016,7 @@ MonoBehaviour:
   - {fileID: 1346277641}
   - {fileID: 1712268718}
   - {fileID: 3835937}
-  chance: 50
+  chance: 30
 --- !u!1 &1388960101
 GameObject:
   m_ObjectHideFlags: 0

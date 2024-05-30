@@ -30,6 +30,7 @@ public class SpaceTraver : Minigame
 
     internal override void Begin()
     {
+        wincase = false;
         currAnswer = 0;
         ToggleAnimators(true);
         GenerateNewCase();
@@ -79,7 +80,8 @@ public class SpaceTraver : Minigame
         Piece goodOne = possibilities[Random.Range(0, possibilities.Count)];
 
 
-        currentPaths = new Piece[] { goodOne, pieces[Random.Range(0, pieces.Count)], pieces[Random.Range(0, pieces.Count)] }; // change this shit.
+        currentPaths = new Piece[] { pieces[Random.Range(0, pieces.Count)], pieces[Random.Range(0, pieces.Count)], pieces[Random.Range(0, pieces.Count)] }; // change this shit.
+        currentPaths[Random.Range(0,2 )] = goodOne;
 
         UpdateGraphic();
 
